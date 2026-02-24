@@ -14,7 +14,8 @@ export default async function Home() {
       }
   return (
 <div>
-  <ThemeToggle/>
+  
+  
   <HeroSection/>
   <ThreeCards/>
   <div className="p-4 md:p-8 ">

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import heroImage from "../public/hero.png";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 export default function HeroSection() {
     return (
         <div className="flex lg:flex-row flex-col justify-around">
@@ -9,8 +10,8 @@ export default function HeroSection() {
                 <h2 className="text-4xl md:text-6xl">The Transparent Link Between You and Your Client.</h2>
                 <p className="text-sm md:text-xl">Real-time messaging + Task visibility for freelancers. No more email threads.</p>
                 <div className="flex gap-4">
-                    <Button className="shadow-xl">Get Started</Button>
-                    <Button className="shadow-xl">Watch Demo</Button>
+                    <Link href="/api/auth/login"><Button className="shadow-xl">Get Started</Button></Link>
+                    <Link href="https://github.com/Yashyas/syncflow"><Button className="shadow-xl">Github Repository</Button></Link>
                 </div>
                 <p className="text-xs md:text-sm">Used by independent developers & designers.</p>
             </div>
