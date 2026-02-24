@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Dialog ,DialogClose,DialogContent,DialogDescription,DialogFooter,DialogHeader,DialogTitle,DialogTrigger } from '@/components/ui/dialog'
 import { CirclePlus } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import AddProject from './addProject'
 
 const projects = [
     {id: 1, title: "Task Manager", client: "Yash Mishra", description: "Create a task manager app with React and Node.js"},
@@ -15,6 +16,7 @@ const projects = [
 
 export default function ProjectSelection() {
     const [open, setOpen] = useState(true)
+    const [addProjectOpen, setAddProjectOpen] = useState(false)
     const [selection, setSelection] = useState(0)
 
     useEffect(() => {
@@ -30,13 +32,12 @@ export default function ProjectSelection() {
     }
 
     const handleCreateProject = () => {
-        // calls database to create a new project and then populates the dashboard with it
-        console.log("Creating a new project")
+        setAddProjectOpen(true)
     }
     
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-         
+         <AddProject open={addProjectOpen} onOpenChange={setAddProjectOpen} />
         <DialogContent className='flex flex-col max-h-[80vh]  min-w-[70vw]' showCloseButton={false}
           onPointerDownOutside={(e)=> e.preventDefault()}
           onEscapeKeyDown={(e)=> e.preventDefault()}
