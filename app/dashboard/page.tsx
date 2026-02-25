@@ -1,7 +1,7 @@
-import ProjectSelection from '@/components/projectSelection'
 import { authOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
+import DashboardClient from './dashboardClient'
 
 
 export default async function Dashboard() {
@@ -9,10 +9,5 @@ export default async function Dashboard() {
   if (!session) {
     redirect("/api/auth/login")
   }
-    
-  return (
-    <div>
-      <ProjectSelection />
-    </div>
-  )
+  return <DashboardClient/>
 }

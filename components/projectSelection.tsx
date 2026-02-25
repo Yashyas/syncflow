@@ -1,43 +1,59 @@
 'use client'
 import ProjectCard from '@/components/projectCard'
 import { Card, CardContent } from '@/components/ui/card'
-import { Dialog ,DialogClose,DialogContent,DialogDescription,DialogFooter,DialogHeader,DialogTitle,DialogTrigger } from '@/components/ui/dialog'
+import { Dialog ,DialogContent,DialogDescription,DialogFooter,DialogHeader,DialogTitle,DialogTrigger } from '@/components/ui/dialog'
 import { CirclePlus } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import AddProject from './addProject'
+import { getUserProjects } from '@/app/actions/projects'
+import { Project } from '@/lib/generated/prisma/client'
+import { toast } from 'sonner'
+import { useDashboardStore } from '@/app/store/dashboardStore'
 
-const projects = [
-    {id: 1, title: "Task Manager", client: "Yash Mishra", description: "Create a task manager app with React and Node.js"},
-    {id: 2, title: "Watch Ecommerce ", client: "Tarun Bansal", description: "Build an ecommerce website for watches using Next.js and MongoDB"},
-    {id: 3, title: "Freelancer Saas website", client: "Barnawal", description: "Develop a SaaS platform for freelancers to manage their projects and clients using React and Firebase"},
-    {id: 4, title: "Blog Platform", client: "Ankit Kumar", description: "Create a blogging platform with user authentication and content management using Next.js and PostgreSQL"},
-    {id: 5, title: "Fitness Tracker", client: "Rohit Sharma", description: "Build a fitness tracking app with React Native and Node.js backend"},
-]
+
 
 export default function ProjectSelection() {
-    const [open, setOpen] = useState(true)
-    const [addProjectOpen, setAddProjectOpen] = useState(false)
-    const [selection, setSelection] = useState(0)
+    const [projects, setProjects] = useState<Project[]>([])
+
+    // No.1. from zustand store project selection drawer toggle 
+    const toggleProjectSelectionDrawer = useDashboardStore((state) => state.toggleProjectSelectionDrawer)
+    const isProjectSelectionDrawerOpen = useDashboardStore((state) => state.isProjectSelectionDrawerOpen)
+    
+    //No.2. from zustand store project selection 
+    const selectedProject = useDashboardStore((state) => state.selectedProject)
+    const setSelectedProject = useDashboardStore((state) => state.setSelectedProject)
+
+    // No.3. from zustand store to toggle add project drawer 
+    const toggleAddProjectDrawer = useDashboardStore((state) => state.toggleAddProjectDrawer)
+    const isAddProjectDrawerOpen = useDashboardStore((state) => state.isAddProjectDrawerOpen)
+   
+
+    async function fetchProjects() {
+            const fetchProject = await getUserProjects()
+            if(fetchProject.error) {
+                toast.error(fetchProject.error)
+            }
+            setProjects(fetchProject.projects ?? [])
+        }
 
     useEffect(() => {
-        // call server to populate projects of the freelancer
-        setOpen(true)
+        fetchProjects()
     },[])
 
-    const handleSelection = (projectId : number) => {
-        setSelection(projectId)
-        // calls database to populate dashboard with said project
-        console.log(`Selected project with id: ${projectId}`)
-        // setOpen(false)
+    const handleSelection = (projectId : string) => {
+        // setSelection(projectId)
+        setSelectedProject(projectId)
+        toggleProjectSelectionDrawer()
     }
 
     const handleCreateProject = () => {
-        setAddProjectOpen(true)
+        // setAddProjectOpen(true)
+            toggleAddProjectDrawer()
     }
     
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-         <AddProject open={addProjectOpen} onOpenChange={setAddProjectOpen} />
+    <Dialog open={isProjectSelectionDrawerOpen} onOpenChange={toggleProjectSelectionDrawer}>
+         <AddProject  onSuccess={()=> fetchProjects()}/>
         <DialogContent className='flex flex-col max-h-[80vh]  min-w-[70vw]' showCloseButton={false}
           onPointerDownOutside={(e)=> e.preventDefault()}
           onEscapeKeyDown={(e)=> e.preventDefault()}
@@ -56,7 +72,7 @@ export default function ProjectSelection() {
                     </CardContent>
                 </Card>
             {projects.map((project) => (
-                <div className={`rounded-xl transition-all duration-400 ${selection === project.id ? 'ring-2 ring-ring ' : ''}`} key={project.id} onClick={() => handleSelection(project.id)}>
+                <div className={`rounded-xl transition-all duration-400 ${selectedProject === project.id ? 'ring-2 ring-ring ' : ''}`} key={project.id} onClick={() => handleSelection(project.id)}>
                     <ProjectCard {...project} />
                 </div>
                 

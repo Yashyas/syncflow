@@ -18,14 +18,19 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from "sonner";
 import React, { useState } from "react";
+import { useDashboardStore } from "@/app/store/dashboardStore";
 
 interface AddProjectProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  onSuccess?: () => void
 }
 
-export default function AddProject({open, onOpenChange}: AddProjectProps) {
+export default function AddProject({onSuccess}: AddProjectProps) {
   const [loading, setLoading] = useState(false);
+
+  // No.3. from zustand store to toggle add project drawer 
+  const isAddProjectDrawerOpen = useDashboardStore((state) => state.isAddProjectDrawerOpen)
+  const toggleAddProjectDrawer = useDashboardStore((state) => state.toggleAddProjectDrawer)
+
   async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoading(true);
@@ -39,11 +44,12 @@ export default function AddProject({open, onOpenChange}: AddProjectProps) {
       return
     }
     toast.success(result?.message || "Project created successfully");
-    onOpenChange(false);
+    toggleAddProjectDrawer();
+    onSuccess?.();
 
   }
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={isAddProjectDrawerOpen} onOpenChange={toggleAddProjectDrawer}>
       <DialogContent className="sm:max-w-sm">
         <form onSubmit={handleSubmit}>
           <DialogHeader>

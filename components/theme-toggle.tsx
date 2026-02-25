@@ -11,7 +11,7 @@ export function ThemeToggle() {
     <Button
       variant="outline"
       size="icon"
-      className="bg-card ring-1 ring-ring hover:text-ring"
+      className="bg-card ring-1 ring-ring hover:text-ring "
       onClick={() => setTheme(theme === "light" ? "dark" : "light")
       }
     >

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card'
 
-export default function ProjectCard(project: { title: string , client: string , description: string }) {
+export default function ProjectCard(project: { title: string , client: string , description: string | null }) {
   return (
     <Card className='cursor-pointer w-full h-full hover:bg-secondary/60 '>
         <CardHeader>

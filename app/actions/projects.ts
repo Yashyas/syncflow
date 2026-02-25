@@ -85,11 +85,34 @@ export async function getUserProjects(){
             const projects = await prisma.project.findMany({
                 where: {
                     freelancerId,
+                },
+                orderBy:{
+                    createdAt: "desc"
                 }
             })
-            return projects
+            return {projects}
         } catch (error) {
             return {error: "Failed to fetch projects"}
+        }
+}
+
+// Get selected project data by freelancer 
+export async function getUserProjectData(projectId: string){
+        const session = await getServerSession(authOptions)
+        if (!session || !session.user.id){
+            redirect("/api/auth/login")   
+        }
+        const freelancerId = session.user.id
+        try {
+            const project = await prisma.project.findUnique({
+                where: {
+                    id: projectId,
+                    freelancerId,
+                }
+            })
+            return {project}
+        } catch (error) {
+            return {error: "Failed to fetch project data"}
         }
 }
 
