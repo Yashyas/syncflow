@@ -28,11 +28,6 @@ import {
 
 // This is sample data.
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   // teams coming soon 
   teams: [
     {
@@ -51,29 +46,6 @@ const data = {
       plan: "Free",
     },
   ],
-
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-    
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-     
-    },
-    {
-      name: "Travel",
-      url: "#",
-    
-    },
-    {
-      name: "Team Sync",
-      url: "#",
-  
-    },
-  ],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -84,10 +56,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain />
-        <NavProjects projects={data.projects} />
+        <NavProjects />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser  />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

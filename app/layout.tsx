@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { toast, Toaster } from "sonner";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Providers } from "@/components/Provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,8 +36,9 @@ export default function RootLayout({
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange>
-          
+          <Providers>
           {children}
+          </Providers>
           <div className="top-4 right-4 fixed">
             <ThemeToggle />
           </div>
