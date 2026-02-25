@@ -35,10 +35,11 @@ export default function RootLayout({
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange>
+          
+          {children}
           <div className="top-4 right-4 fixed">
             <ThemeToggle />
           </div>
-          {children}
           <Toaster theme="dark" richColors position="top-right"/>
         </ThemeProvider>
         
