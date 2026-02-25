@@ -37,17 +37,19 @@ export default function ProjectSelection() {
         }
 
     useEffect(() => {
-        fetchProjects()
-    },[])
+        if(isProjectSelectionDrawerOpen){
+            fetchProjects()
+        }
+    },[isProjectSelectionDrawerOpen])
 
-    const handleSelection = (projectId : string) => {
-        // setSelection(projectId)
-        setSelectedProject(projectId)
+    const handleSelection = (project :Project ) => {
+        setSelectedProject(project)
+        toast.success(`Selected project: ${project.title}`)
         toggleProjectSelectionDrawer()
+
     }
 
     const handleCreateProject = () => {
-        // setAddProjectOpen(true)
             toggleAddProjectDrawer()
     }
     
@@ -72,7 +74,7 @@ export default function ProjectSelection() {
                     </CardContent>
                 </Card>
             {projects.map((project) => (
-                <div className={`rounded-xl transition-all duration-400 ${selectedProject === project.id ? 'ring-2 ring-ring ' : ''}`} key={project.id} onClick={() => handleSelection(project.id)}>
+                <div className={`rounded-xl transition-all duration-400 ${selectedProject?.id === project.id ? 'ring-2 ring-ring ' : ''}`} key={project.id} onClick={() => handleSelection(project)}>
                     <ProjectCard {...project} />
                 </div>
                 

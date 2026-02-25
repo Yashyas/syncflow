@@ -1,3 +1,4 @@
+import { Project } from "@/lib/generated/prisma/client";
 import { create } from "zustand/react";
 
 interface DashboardStore {
@@ -6,12 +7,20 @@ interface DashboardStore {
     toggleProjectSelectionDrawer: () => void;
 
     //2. Project selection for dashboard to load data 
-    selectedProject: string | null;
-    setSelectedProject: (project: string) => void;
+    selectedProject: Project | null;
+    setSelectedProject: (project: Project | null) => void;
 
     //3. Add new project drawer toggle
     isAddProjectDrawerOpen: boolean;
     toggleAddProjectDrawer: () => void;
+
+    // 4. Delete project drawer toggle 
+    isDeleteProjectDrawerOpen: boolean;
+    toggleDeleteProjectDrawer: () => void;  
+
+    // 5.Share project drawer toggle 
+    isShareProjectDrawerOpen: boolean
+    toggleShareProjectDrawer: ()=> void
 
     
 }
@@ -23,9 +32,17 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
 
     //2. Project selection for dashboard to load data 
     selectedProject: null,
-    setSelectedProject: (project: string) => set({ selectedProject: project }),
+    setSelectedProject: (project: Project | null) => set({ selectedProject: project }),
 
     //3. Add new project drawer toggle
     isAddProjectDrawerOpen: false,
     toggleAddProjectDrawer: () => set((state) => ({ isAddProjectDrawerOpen: !state.isAddProjectDrawerOpen })),
+
+    // 4. Delete project drawer toggle
+    isDeleteProjectDrawerOpen: false,
+    toggleDeleteProjectDrawer: () => set((state) => ({ isDeleteProjectDrawerOpen: !state.isDeleteProjectDrawerOpen })),
+
+    // 5.Share project drawer toggle 
+    isShareProjectDrawerOpen: false,
+    toggleShareProjectDrawer:() => set((state)=>({isShareProjectDrawerOpen: !state.isShareProjectDrawerOpen}))
 }));

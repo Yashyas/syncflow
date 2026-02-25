@@ -1,88 +1,51 @@
 "use client"
 
 import {
-  Folder,
+  FolderDot,
   FolderOpenDot,
-  Forward,
-  MoreHorizontal,
-  Trash2,
+  Share,
+  Trash,
   type LucideIcon,
 } from "lucide-react"
 
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuAction,
-  SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { Card } from "./ui/card"
+import { Button } from "./ui/button"
+import { useDashboardStore } from "@/app/store/dashboardStore"
 
-export function NavProjects({
-  projects,
-}: {
-  projects: {
-    name: string
-    url: string
-
-  }[]
-}) {
+export function NavProjects() {
   const { isMobile } = useSidebar()
+  const toggleProjectSelectionDrawer = useDashboardStore((state) => state.toggleProjectSelectionDrawer)
+  const selectedProject = useDashboardStore((state) => state.selectedProject)
+  const toggleDeleteProjectDrawer = useDashboardStore((state) => state.toggleDeleteProjectDrawer)
+  const toggleShareProjectDrawer = useDashboardStore((state)=> state.toggleShareProjectDrawer)
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Projects</SidebarGroupLabel>
+      <SidebarGroupLabel>Current Project</SidebarGroupLabel>
       <SidebarMenu>
-        {projects.map((item) => (
-          <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton asChild>
-              <a href={item.url}>
-                <FolderOpenDot/>
-                <span>{item.name}</span>
-              </a>
-            </SidebarMenuButton>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuAction showOnHover>
-                  <MoreHorizontal />
-                  <span className="sr-only">More</span>
-                </SidebarMenuAction>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-48 rounded-lg"
-                side={isMobile ? "bottom" : "right"}
-                align={isMobile ? "end" : "start"}
-              >
-                <DropdownMenuItem>
-                  <Folder className="text-muted-foreground" />
-                  <span>View Project</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Forward className="text-muted-foreground" />
-                  <span>Share Project</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <Trash2 className="text-muted-foreground" />
-                  <span>Delete Project</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        ))}
-        <SidebarMenuItem>
-          <SidebarMenuButton className="text-sidebar-foreground/70">
-            <MoreHorizontal className="text-sidebar-foreground/70" />
-            <span>More</span>
-          </SidebarMenuButton>
+        <Card className="w-full flex-row items-center bg-primary p-4 border-0 rounded-none">
+          <div className="flex items-center">
+            <FolderOpenDot className="ml-2 h-6"/>
+          <p className="ml-2 ">{selectedProject?.title}</p>
+          </div>
+          <div className="flex items-center ml-auto">
+            <Share className=" hover:cursor-pointer h-5 " onClick={toggleShareProjectDrawer}/>
+          <Trash className="ml-2 mr-2 hover:cursor-pointer h-5" onClick={toggleDeleteProjectDrawer} />
+          </div> 
+        </Card>
+
+        <SidebarMenuItem className="mt-4">
+            <Button variant="outline" size="sm" className="w-full bg-secondary" onClick={toggleProjectSelectionDrawer}>          
+                  <FolderDot/>
+                  <span>Change project</span>
+            </Button>
         </SidebarMenuItem>
       </SidebarMenu>
     </SidebarGroup>

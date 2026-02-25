@@ -5,15 +5,18 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList,  Breadcrumb
 import { Separator } from '@/components/ui/separator'
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 import { useDashboardStore } from '../store/dashboardStore'
+import DeleteProject from '@/components/deleteProject'
+import { ShareProject } from '@/components/shareProject'
 
 export default function DashboardClient() {
   const selectedProject = useDashboardStore((state) => state.selectedProject)
+  const toggleProjectSelectionDrawer = useDashboardStore((state) => state.toggleProjectSelectionDrawer)
 
   return (
     <div>
       <ProjectSelection />
-      {/* <p>Selected Project: {selectedProject}</p> */}
-
+      <DeleteProject/>
+      <ShareProject/>
       {/* Sidebar and breadcrums  */}
       <SidebarProvider>
       <AppSidebar />
@@ -25,13 +28,13 @@ export default function DashboardClient() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
+                  <BreadcrumbLink href="#" onClick={toggleProjectSelectionDrawer}>
                     Project Selection
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Selected Project</BreadcrumbPage>
+                  <BreadcrumbPage>{selectedProject?.title}</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
