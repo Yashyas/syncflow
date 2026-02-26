@@ -56,7 +56,7 @@ export default function ProjectSelection() {
   return (
     <Dialog open={isProjectSelectionDrawerOpen} onOpenChange={toggleProjectSelectionDrawer}>
          <AddProject  onSuccess={()=> fetchProjects()}/>
-        <DialogContent className='flex flex-col max-h-[80vh]  min-w-[70vw]' showCloseButton={false}
+        <DialogContent className='flex flex-col max-h-[80vh] min-h-[80vh] min-w-[70vw]' showCloseButton={false}
           onPointerDownOutside={(e)=> e.preventDefault()}
           onEscapeKeyDown={(e)=> e.preventDefault()}
         >

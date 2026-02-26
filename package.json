@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",
+    "@dnd-kit/core": "^6.3.1",
     "@prisma/client": "6.19",
     "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",
