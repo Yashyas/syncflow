@@ -22,6 +22,10 @@ interface DashboardStore {
     isShareProjectDrawerOpen: boolean
     toggleShareProjectDrawer: ()=> void
 
+    // 6.Add Task drawer toggle 
+    isAddTaskDrawerOpen: boolean;
+    toggleAddTaskDrawer: ()=> void;
+
     
 }
 
@@ -44,5 +48,10 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
 
     // 5.Share project drawer toggle 
     isShareProjectDrawerOpen: false,
-    toggleShareProjectDrawer:() => set((state)=>({isShareProjectDrawerOpen: !state.isShareProjectDrawerOpen}))
+    toggleShareProjectDrawer:() => set((state)=>({isShareProjectDrawerOpen: !state.isShareProjectDrawerOpen})),
+
+    // 6. Add task drawer toggle 
+    isAddTaskDrawerOpen: false,
+    toggleAddTaskDrawer: () => set((state)=>
+    ({isAddTaskDrawerOpen: !state.isAddTaskDrawerOpen})),
 }));

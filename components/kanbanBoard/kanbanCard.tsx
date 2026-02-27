@@ -4,7 +4,12 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card
 import { MessageSquareText } from "lucide-react";
 import { Separator } from "react-resizable-panels";
 
-export default function KanbanCard({task}:{task :Task}){
+interface KanbanCardProps {
+    task: Task
+    overlay? : boolean
+}
+
+export default function KanbanCard({task , overlay = false} : KanbanCardProps){
     const {setNodeRef,listeners,attributes,isDragging} = useDraggable({
         id: task.id,
     })
@@ -14,7 +19,7 @@ export default function KanbanCard({task}:{task :Task}){
             ref={setNodeRef}
             {...listeners}
             {...attributes}
-            className={`cursor-grab active:cursor-grabbing my-2 w-full py-4 transition-opacity ${isDragging ? 'opacity-40 border border-ring shadow' : 'opacity-100'}`}
+            className={`cursor-grab active:cursor-grabbing my-2 w-full py-4 transition-all ${isDragging && !overlay ? 'opacity-40 border border-ring shadow' : 'opacity-100'} ${overlay ? 'rotate-2 scale-105':''}`}
             >
             <CardHeader className="">
                 <CardTitle>{task.title}</CardTitle>
