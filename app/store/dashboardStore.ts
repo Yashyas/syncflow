@@ -1,4 +1,4 @@
-import { Project } from "@/lib/generated/prisma/client";
+import { Project, Task } from "@/lib/generated/prisma/client";
 import { create } from "zustand/react";
 
 interface DashboardStore {
@@ -23,8 +23,16 @@ interface DashboardStore {
     toggleShareProjectDrawer: ()=> void
 
     // 6.Add Task drawer toggle 
-    isAddTaskDrawerOpen: boolean;
-    toggleAddTaskDrawer: ()=> void;
+    isAddTaskDrawerOpen: boolean
+    toggleAddTaskDrawer: ()=> void
+
+    // 7.Tasks array for kanban board 
+    tasks: Task[]
+    setTasks: (tasks: Task[]) => void
+    addTask: (task: Task) => void
+    updateTask: (task: Task) => void
+    removeTask: (taskId: string) => void
+    
 
     
 }
@@ -54,4 +62,13 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
     isAddTaskDrawerOpen: false,
     toggleAddTaskDrawer: () => set((state)=>
     ({isAddTaskDrawerOpen: !state.isAddTaskDrawerOpen})),
+
+      // 7.Tasks array for kanban board 
+    tasks: [],
+    setTasks: (tasks) => set({tasks}),
+    addTask: (task) => set((state)=>({tasks: [task, ...state.tasks]})),
+    updateTask: (task) => set((state)=>({
+        tasks: state.tasks.map((t) => (t.id === task.id ? task : t)) })),
+    removeTask: (taskId) => set((state)=>({
+        tasks: state.tasks.filter((t) => t.id !== taskId) })),
 }));

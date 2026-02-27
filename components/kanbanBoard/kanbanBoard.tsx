@@ -1,86 +1,23 @@
 import { TaskStatus } from '@/lib/generated/prisma/enums'
 import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, MouseSensor, PointerSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import { COLUMNS } from './constants'
 import KanbanColumn from './kanbanColumn'
 import { Task } from '@/lib/generated/prisma/client'
 import KanbanCard from './kanbanCard'
 import AddTask from '../addTask'
+import { getProjectTaskData } from '@/app/actions/tasks'
+import { useDashboardStore } from '@/app/store/dashboardStore'
+import { toast } from 'sonner'
 
 export default function KanbanBoard() {
-    const fetchedTasks = [
-        {
-            id: "tid",
-            title: "task1",
-            description: "helo",
-            status: TaskStatus.completed,
-            projectId: "pid",
-            createdAt : new Date(),
-            updatedAt : new Date(),
-            message:[]
-        },
-        {
-            id: "tid2",
-            title: "task12",
-            description: "helo",
-            status: TaskStatus.in_progress,
-            projectId: "pid",
-            createdAt : new Date(),
-            updatedAt : new Date(),
-            message:[]
-        },
-        {
-            id: "tid3",
-            title: "task12",
-            description: "helo helo v helo helo helohelo helo helo helo helo helo",
-            status: TaskStatus.in_progress,
-            projectId: "pid",
-            createdAt : new Date(),
-            updatedAt : new Date(),
-            message:[]
-        },
-        {
-            id: "tid4",
-            title: "task12",
-            description: "helo",
-            status: TaskStatus.in_progress,
-            projectId: "pid",
-            createdAt : new Date(),
-            updatedAt : new Date(),
-            message:[]
-        },
-        {
-            id: "tid5",
-            title: "task15",
-            description: "helo",
-            status: TaskStatus.in_progress,
-            projectId: "pid",
-            createdAt : new Date(),
-            updatedAt : new Date(),
-            message:[]
-        },
-        {
-            id: "tid6",
-            title: "task16",
-            description: "helo helo v helo helo helohelo helo helo helo helo helo",
-            status: TaskStatus.in_progress,
-            projectId: "pid",
-            createdAt : new Date(),
-            updatedAt : new Date(),
-            message:[]
-        },
-        {
-            id: "tid7",
-            title: "task17",
-            description: "helo",
-            status: TaskStatus.in_progress,
-            projectId: "pid",
-            createdAt : new Date(),
-            updatedAt : new Date(),
-            message:[]
-        },
-    ]
-    const [tasks, setTasks] = (useState<Task[]>(fetchedTasks))
+    
+    // 7. from zustand store task array 
+    const tasks = useDashboardStore((state)=> state.tasks)
+    const setTasks = useDashboardStore((state)=> state.setTasks)
+    const updateTask = useDashboardStore((state)=> state.updateTask)
+
+    const selectedProject = useDashboardStore((state)=> state.selectedProject)
     const [activeTask,setActiveTask] = useState<Task | null>(null)
 
     const sensors = useSensors(
@@ -97,8 +34,24 @@ export default function KanbanBoard() {
         })
     )
 
+    useEffect(()=>{
+        if(!selectedProject?.id) return
+        fetchTasks()
+    },[selectedProject?.id])
+
     async function fetchTasks(){
         // fetch tasks from server 
+        if(!selectedProject?.id || !selectedProject?.sharingPassword){
+            return
+        }
+        const data =await getProjectTaskData(selectedProject.id,selectedProject.sharingPassword)
+        
+        if(data.error){
+            toast.error(data.error)
+            return
+        }
+        console.log("Fetch task ran")
+        setTasks(data.tasksData?.tasks ?? [])
     }
 
     function handleDragStart(event:DragStartEvent){
@@ -115,16 +68,23 @@ export default function KanbanBoard() {
         const taskId = active.id as string
         const newStatus = over.id as TaskStatus
 
-        setTasks((prev) =>
-        prev.map((t) => (t.id === taskId ? {...t,status: newStatus} : t))
-        )
+        const taskToUpdate = tasks.find((t)=> t.id === taskId);
+        if(taskToUpdate){
+            updateTask({...taskToUpdate,status: newStatus})
 
-        // update task status in sever 
-        console.log(`Staus updated of ${taskId} and current status: ${newStatus}`)
+            // update task status in sever 
+        try {
+            console.log(`Staus updated of ${taskId} and current status: ${newStatus}`)
+        } catch (error) {
+            toast.error("Network error. Reverting...")
+            updateTask(taskToUpdate)
+        }
+        }
+
     }
     return (
         <>
-        <AddTask onSuccess={fetchTasks}/>
+        <AddTask />
         <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart} sensors={sensors} >
             <div className='flex gap-1  overflow-x-scroll overflow-y-scroll no-scrollbar'>
                 {COLUMNS.map((col) => (
@@ -135,7 +95,6 @@ export default function KanbanBoard() {
                     tasks={tasks.filter((t) => t.status === col.id)}
                     />
                 ))}
-                
             </div>
 
             <DragOverlay>

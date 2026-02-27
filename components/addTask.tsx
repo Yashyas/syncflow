@@ -1,5 +1,5 @@
 "use client"
-import { createProject, createTask } from "@/app/actions/projects";
+import {createTask } from "@/app/actions/tasks";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -21,32 +21,40 @@ import React, { useState } from "react";
 import { useDashboardStore } from "@/app/store/dashboardStore";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 
-interface AddTaskProps {
-    onSuccess?: () => void
-}
 
-export default function AddTask({ onSuccess }: AddTaskProps) {
+export default function AddTask() {
     const [loading, setLoading] = useState(false);
+    const selectedProject = useDashboardStore((state)=> state.selectedProject)
 
-    // No.3. from zustand store to toggle add project drawer 
+    // No.6. from zustand store to toggle add project drawer 
     const isAddTaskDrawerOpen = useDashboardStore((state) => state.isAddTaskDrawerOpen)
     const toggleAddTaskDrawer = useDashboardStore((state) => state.toggleAddTaskDrawer)
+    const addTask = useDashboardStore((state) => state.addTask)
 
     async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
         event.preventDefault();
         setLoading(true);
 
         const formData = new FormData(event.target);
-        const result = await createProject(formData);
+        if(!selectedProject){
+            toast.error("Error creating task")
+            return
+        }
+        const result = await createTask(formData,selectedProject);
 
         setLoading(false);
         if (result?.error) {
             toast.error(result.error);
             return
         }
+        if(result && result.task){
+            addTask(result.task)
+        }
+        
+        
         toast.success(result?.message || "Task created successfully");
         toggleAddTaskDrawer();
-        onSuccess?.();
+        
 
     }
     return (

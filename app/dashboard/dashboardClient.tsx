@@ -7,6 +7,7 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/s
 import { useDashboardStore } from '../store/dashboardStore'
 import DeleteProject from '@/components/deleteProject'
 import { ShareProject } from '@/components/shareProject'
+import KanbanBoard from '@/components/kanbanBoard/kanbanBoard'
 
 export default function DashboardClient() {
   const selectedProject = useDashboardStore((state) => state.selectedProject)
@@ -40,14 +41,15 @@ export default function DashboardClient() {
             </Breadcrumb>
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4">
+        <KanbanBoard/>
+        {/* <div className="flex flex-1 flex-col gap-4 p-4">
           <div className="grid auto-rows-min gap-4 md:grid-cols-3">
             <div className="bg-muted/50 aspect-video rounded-xl" />
             <div className="bg-muted/50 aspect-video rounded-xl" />
             <div className="bg-muted/50 aspect-video rounded-xl" />
           </div>
           <div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min" />
-        </div>
+        </div> */}
       </SidebarInset>
     </SidebarProvider>
     </div>
