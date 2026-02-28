@@ -45,7 +45,8 @@ export default function KanbanCard({task , overlay = false} : KanbanCardProps){
                 <p><span className="text-primary">Description : </span>{task.description}</p>
             </CardContent>
             <CardFooter className=" flex gap-2 justify-end">
-                <Trash2 onClick={handleDelete}/>
+                
+                <Trash2 className="mr-auto" onClick={handleDelete}/>
                 <SquarePen onClick={handleClick}/>
                 <MessageSquareText/>
             </CardFooter>
