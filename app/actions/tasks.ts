@@ -1,10 +1,11 @@
 "use server"
 import { authOptions } from "@/lib/auth"
-import { Project } from "@/lib/generated/prisma/client"
+import { Project, Task } from "@/lib/generated/prisma/client"
 import { TaskStatus } from "@/lib/generated/prisma/enums"
 import { prisma } from "@/lib/prisma"
 import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
+import { title } from "process"
 
 export async function createTask(formData: FormData, project:Project){
     const session = await getServerSession(authOptions)
@@ -62,7 +63,7 @@ export async function getProjectTaskData(projectId: string,sharingPassword: stri
         if (!session || !session.user.id){
             redirect("/api/auth/login")   
         }
-        const freelancerId = session.user.id
+
         try {
             const tasksData = await prisma.project.findUnique({
                 where: {
@@ -74,5 +75,69 @@ export async function getProjectTaskData(projectId: string,sharingPassword: stri
             return {tasksData}
         } catch (error) {
             return {error: "Failed to fetch project data"}
+        }
+}
+
+// Update task 
+interface Data {
+    title?:string | null ;
+    description?:string | null;
+    status?:TaskStatus | null;
+}
+export async function updateTask(task: Task,data:Data){
+     const session = await getServerSession(authOptions)
+        if (!session || !session.user.id){
+            redirect("/api/auth/login")   
+        }
+        const updateData: any = {}
+        if(data.title) updateData.title =data.title
+        if(data.description) updateData.description = data.description
+        if(data.status) updateData.status =data.status
+
+        try {
+            // checking project ownership 
+            const project = await prisma.project.findUnique({
+                where: {
+                    id: task.projectId,
+                    freelancerId: session.user.id,
+                }
+            })
+            if(!project){return {error: "Failed to update task details"}}
+
+            const updatedTask = await prisma.task.update({
+                where: {id : task.id},
+                data: updateData
+            })
+            return {message: "Task updated successfully",updatedTask}
+        } catch (error) {
+            return{error: "Failed to update task details"}
+        }
+}
+
+// Delete Task 
+export async function deleteTask(task: Task){
+     const session = await getServerSession(authOptions)
+        if (!session || !session.user.id){
+            redirect("/api/auth/login")   
+        }
+        try {
+            // checking project ownership 
+            const project = await prisma.project.findUnique({
+                where: {
+                    id: task.projectId,
+                    freelancerId: session.user.id,
+                }
+            })
+            if(!project){return {error: "Failed to delete task details"}}
+
+             await prisma.task.delete({
+                where: {
+                    id : task.id,
+                    projectId :task.projectId
+                }
+            })
+            return {message: "Task deleted successfully"}
+        } catch (error) {
+            return{error: "Failed to delete task details"}
         }
 }

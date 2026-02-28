@@ -33,8 +33,17 @@ interface DashboardStore {
     updateTask: (task: Task) => void
     removeTask: (taskId: string) => void
     
+     // 8.Add Task drawer toggle 
+    isUpdateTaskDrawerOpen: boolean
+    toggleUpdateTaskDrawer: ()=> void
 
-    
+    //9. Selected task 
+    selectedTask: Task | null;
+    setSelectedTask: (task: Task | null) => void;
+
+     // 8.Add Task drawer toggle 
+    isDeleteTaskDrawerOpen: boolean
+    toggleDeleteTaskDrawer: ()=> void
 }
 
 export const useDashboardStore = create<DashboardStore>((set) => ({
@@ -71,4 +80,18 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
         tasks: state.tasks.map((t) => (t.id === task.id ? task : t)) })),
     removeTask: (taskId) => set((state)=>({
         tasks: state.tasks.filter((t) => t.id !== taskId) })),
+
+     // 8. Add task drawer toggle 
+    isUpdateTaskDrawerOpen: false,
+    toggleUpdateTaskDrawer: () => set((state)=>
+    ({isUpdateTaskDrawerOpen: !state.isUpdateTaskDrawerOpen})),
+
+    //9. Selected task 
+    selectedTask: null,
+    setSelectedTask: (task: Task | null) => set({ selectedTask: task }),
+
+     // 10. Delete task drawer toggle 
+    isDeleteTaskDrawerOpen: false,
+    toggleDeleteTaskDrawer: () => set((state)=>
+    ({isDeleteTaskDrawerOpen: !state.isDeleteTaskDrawerOpen})),
 }));

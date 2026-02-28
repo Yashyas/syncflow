@@ -6,16 +6,18 @@ import KanbanColumn from './kanbanColumn'
 import { Task } from '@/lib/generated/prisma/client'
 import KanbanCard from './kanbanCard'
 import AddTask from '../addTask'
-import { getProjectTaskData } from '@/app/actions/tasks'
+import { getProjectTaskData, updateTask } from '@/app/actions/tasks'
 import { useDashboardStore } from '@/app/store/dashboardStore'
 import { toast } from 'sonner'
+import UpdateTask from '../updateTask'
+import DeleteTask from '../deleteTask'
 
 export default function KanbanBoard() {
     
     // 7. from zustand store task array 
     const tasks = useDashboardStore((state)=> state.tasks)
     const setTasks = useDashboardStore((state)=> state.setTasks)
-    const updateTask = useDashboardStore((state)=> state.updateTask)
+    const editedTask = useDashboardStore((state)=> state.updateTask)
 
     const selectedProject = useDashboardStore((state)=> state.selectedProject)
     const [activeTask,setActiveTask] = useState<Task | null>(null)
@@ -70,14 +72,15 @@ export default function KanbanBoard() {
 
         const taskToUpdate = tasks.find((t)=> t.id === taskId);
         if(taskToUpdate){
-            updateTask({...taskToUpdate,status: newStatus})
+            editedTask({...taskToUpdate,status: newStatus})
 
             // update task status in sever 
         try {
-            console.log(`Staus updated of ${taskId} and current status: ${newStatus}`)
+            console.log(`Staus updated of ${taskId} and current status: ${newStatus}`)    
+            updateTask(taskToUpdate,{status:newStatus})
         } catch (error) {
             toast.error("Network error. Reverting...")
-            updateTask(taskToUpdate)
+            editedTask(taskToUpdate)
         }
         }
 
@@ -85,6 +88,8 @@ export default function KanbanBoard() {
     return (
         <>
         <AddTask />
+        <UpdateTask/> 
+        <DeleteTask/>
         <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart} sensors={sensors} >
             <div className='flex gap-1  overflow-x-scroll overflow-y-scroll no-scrollbar'>
                 {COLUMNS.map((col) => (
