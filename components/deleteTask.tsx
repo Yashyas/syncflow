@@ -43,11 +43,11 @@ export default function DeleteTask() {
             toggleDeleteTaskDrawer();
             // delete task from zustand store 
             removeTask(selectedTask.id)
-
+                        
         } catch (error) {
             toast.error("Failed to delete project");
         }
-
+  
 
     }
     return (

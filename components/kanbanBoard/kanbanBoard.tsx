@@ -11,6 +11,8 @@ import { useDashboardStore } from '@/app/store/dashboardStore'
 import { toast } from 'sonner'
 import UpdateTask from '../updateTask'
 import DeleteTask from '../deleteTask'
+import { Button } from '../ui/button'
+import { CirclePlus } from 'lucide-react'
 
 export default function KanbanBoard() {
     
@@ -90,6 +92,7 @@ export default function KanbanBoard() {
         <AddTask />
         <UpdateTask/> 
         <DeleteTask/>
+        
         <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart} sensors={sensors} >
             <div className='flex gap-1  overflow-x-scroll overflow-y-scroll no-scrollbar'>
                 {COLUMNS.map((col) => (

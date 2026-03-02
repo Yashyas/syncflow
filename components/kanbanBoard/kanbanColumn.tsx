@@ -16,6 +16,7 @@ interface KanbanColumnProps{
 export default function KanbanColumn({id,label,tasks}: KanbanColumnProps) {
         const {setNodeRef,isOver} =useDroppable({id})
         const toggleAddTaskDrawer = useDashboardStore((state) => state.toggleAddTaskDrawer)
+        
   return (
     <div className="flex flex-col p-2 w-full h-[90vh]  ">
       <div className="flex justify-center mb-1 ">
