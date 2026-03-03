@@ -1,6 +1,12 @@
 import { Project, Task } from "@/lib/generated/prisma/client";
 import { create } from "zustand/react";
 
+export enum CurrentView {
+    KANBAN = 'KANBAN',
+    CHAT = 'CHAT',
+    ACTIVITY = 'ACTIVITY',
+}
+
 interface DashboardStore {
     //1. Project selection drawer toggle 
     isProjectSelectionDrawerOpen: boolean;
@@ -41,9 +47,13 @@ interface DashboardStore {
     selectedTask: Task | null;
     setSelectedTask: (task: Task | null) => void;
 
-     // 8.Add Task drawer toggle 
+     // 10.Add Task drawer toggle 
     isDeleteTaskDrawerOpen: boolean
     toggleDeleteTaskDrawer: ()=> void
+
+    //11.Current dashboard view
+    currentDashboardView: CurrentView;
+    setCurrentDashboardView: (view: CurrentView) => void;
 }
 
 export const useDashboardStore = create<DashboardStore>((set) => ({
@@ -94,4 +104,8 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
     isDeleteTaskDrawerOpen: false,
     toggleDeleteTaskDrawer: () => set((state)=>
     ({isDeleteTaskDrawerOpen: !state.isDeleteTaskDrawerOpen})),
+
+        //11.Current dashboard view
+    currentDashboardView: CurrentView.KANBAN,
+    setCurrentDashboardView: (view: CurrentView) => set({currentDashboardView: view}),
 }));

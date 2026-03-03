@@ -27,7 +27,7 @@ export function NavProjects() {
   const toggleShareProjectDrawer = useDashboardStore((state)=> state.toggleShareProjectDrawer)
 
   return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+    <SidebarGroup className="group-data-[collapsible=icon]:hidden mt-auto mb-8">
       <SidebarGroupLabel>Current Project</SidebarGroupLabel>
       <SidebarMenu>
         <Card className="w-full flex-row items-center bg-primary p-4 border-0 rounded-none">

@@ -39,7 +39,7 @@ export default function RootLayout({
           <Providers>
           {children}
           </Providers>
-          <div className="top-4 right-4 fixed">
+          <div className="top-1 right-2 fixed">
             <ThemeToggle />
           </div>
           <Toaster theme="dark" richColors position="top-right"/>

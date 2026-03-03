@@ -17,13 +17,16 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
+import { CurrentView, useDashboardStore } from "@/app/store/dashboardStore"
 
 export function NavMain() {
+
+  const setCurrentDashboardView = useDashboardStore((state) => state.setCurrentDashboardView)
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
       <SidebarMenu>
-            <SidebarMenuItem>
+            <SidebarMenuItem onClick={ () => setCurrentDashboardView(CurrentView.CHAT)}>
                 <SidebarMenuButton tooltip="Messages">
                   <MessageSquare/>
                   <span>Messages</span>
@@ -37,7 +40,7 @@ export function NavMain() {
                 </SidebarMenuButton>  
             </SidebarMenuItem>
 
-            <SidebarMenuItem>
+            <SidebarMenuItem onClick={ () => setCurrentDashboardView(CurrentView.KANBAN)}>
                 <SidebarMenuButton tooltip="Ideas">
                   <Lightbulb/>
                   <span>Ideas</span>

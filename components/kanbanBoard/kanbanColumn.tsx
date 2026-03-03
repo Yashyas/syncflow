@@ -30,9 +30,9 @@ export default function KanbanColumn({id,label,tasks}: KanbanColumnProps) {
                     <KanbanCard key={task.id} task={task}/>
                 ))}
                 {tasks.length === 0 && (
-                    <div className="flex-1 w-full flex flex-col gap-4 items-center justify-center" onClick={toggleAddTaskDrawer}>
+                    <div className="flex-1 w-full flex flex-col gap-4 items-center justify-center" >
                         <p>No tasks</p>
-                        <Button><CirclePlus/>Add Task</Button>
+                        <Button onClick={toggleAddTaskDrawer}><CirclePlus/>Add Task</Button>
                     </div>
                     
                 )}
