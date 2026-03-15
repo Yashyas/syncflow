@@ -11,7 +11,8 @@ import KanbanBoard from '@/components/kanbanBoard/kanbanBoard'
 import { ButtonGroup } from '@/components/ui/button-group'
 import { Button } from '@/components/ui/button'
 import { Activity, CirclePlus, Edit, FolderInput, FolderX, Lightbulb, MessageSquare, Share, Trash } from 'lucide-react'
-import { ChatWindow } from '@/components/chatWindow'
+import ChatWindow  from '@/components/chatWindow'
+import Setting from '@/components/setting'
 
 export default function DashboardClient() {
   const selectedProject = useDashboardStore((state) => state.selectedProject)
@@ -28,6 +29,7 @@ export default function DashboardClient() {
       <ProjectSelection />
       <DeleteProject />
       <ShareProject />
+      <Setting />
       {/* Sidebar and breadcrums  */}
     
       <SidebarProvider>

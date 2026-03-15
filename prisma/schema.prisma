@@ -104,6 +104,7 @@ model Project{
   updatedAt   DateTime @updatedAt
 
   freelancer User @relation(fields: [freelancerId], references: [id], onDelete: Cascade)
+  @@index([freelancerId])
 }
 
 enum TaskStatus {
@@ -126,6 +127,7 @@ model Task {
   updatedAt   DateTime @updatedAt
 
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  @@index([projectId])
 }
 
 enum Sender {
@@ -143,4 +145,5 @@ model Message {
   updatedAt DateTime @updatedAt
 
   task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  @@index([taskId])
 }

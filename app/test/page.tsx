@@ -1,15 +1,12 @@
 "use client"
-import React from 'react'
-import AddProject from "@/components/addProject"
-import DeleteProject from '@/components/deleteProject'
-import { useDashboardStore } from '../store/dashboardStore'
-import KanbanBoard from '@/components/kanbanBoard/kanbanBoard'
-import { ChatWindow } from '@/components/chatWindow'
+
+import Setting  from '@/components/setting'
 export default function page() {
   
   return (
     <div>
-      <ChatWindow/>
+      hello
+        <Setting/>
     </div>
   )
 }

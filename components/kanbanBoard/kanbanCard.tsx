@@ -2,7 +2,7 @@ import { Task } from "@/lib/generated/prisma/client";
 import {useDraggable} from '@dnd-kit/core'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { MessageSquareText, SquarePen, Trash2 } from "lucide-react";
-import { useDashboardStore } from "@/app/store/dashboardStore";
+import { CurrentView, useDashboardStore } from "@/app/store/dashboardStore";
 import UpdateTask from "../updateTask";
 
 interface KanbanCardProps {
@@ -17,6 +17,7 @@ export default function KanbanCard({task , overlay = false} : KanbanCardProps){
       const toggleUpdateTaskDrawer = useDashboardStore((state) => state.toggleUpdateTaskDrawer)
       const setSelectedTask = useDashboardStore((state)=>state.setSelectedTask)
        const toggleDeleteTaskDrawer = useDashboardStore((state) => state.toggleDeleteTaskDrawer)
+       const setCurrentDashboardView = useDashboardStore((state) => state.setCurrentDashboardView)
       
 
       function handleClick(){
@@ -27,6 +28,11 @@ export default function KanbanCard({task , overlay = false} : KanbanCardProps){
       function handleDelete(){
         setSelectedTask(task)
         toggleDeleteTaskDrawer()
+      }
+
+      function handleChat(){
+        setSelectedTask(task)
+        setCurrentDashboardView(CurrentView.CHAT)
       }
 
     return(
@@ -48,7 +54,7 @@ export default function KanbanCard({task , overlay = false} : KanbanCardProps){
                 
                 <Trash2 className="mr-auto" onClick={handleDelete}/>
                 <SquarePen onClick={handleClick}/>
-                <MessageSquareText/>
+                <MessageSquareText onClick={handleChat}/>
             </CardFooter>
         </Card>
         </>

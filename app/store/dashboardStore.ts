@@ -1,10 +1,15 @@
-import { Project, Task } from "@/lib/generated/prisma/client";
+import { Message, Project, Task } from "@/lib/generated/prisma/client";
 import { create } from "zustand/react";
 
 export enum CurrentView {
     KANBAN = 'KANBAN',
     CHAT = 'CHAT',
     ACTIVITY = 'ACTIVITY',
+}
+
+interface MessageSlice {
+  messages: Message[]; 
+  isLoading: boolean;  
 }
 
 interface DashboardStore {
@@ -54,6 +59,27 @@ interface DashboardStore {
     //11.Current dashboard view
     currentDashboardView: CurrentView;
     setCurrentDashboardView: (view: CurrentView) => void;
+
+     // 12.Setting drawer toggle 
+     isSettingDrawerOpen: boolean
+     toggleSettingDrawer: ()=> void
+
+      // ── 13. CHAT SLICE ────────────────────────────────────────────────────────
+
+  taskChats: Record<string, MessageSlice>;
+//   initial message set for a task 
+  setTaskMessages: (taskId: string, messages: Message[]) => void;
+//   new message appended in store 
+  appendMessage: (taskId: string, message: Message) => void;
+// replace the message with the one that came 
+  replaceOptimisticMessage: (taskId: string,optimisticId: string,real: Message
+  ) => void;
+ 
+  // removeMessage — used to ROLL BACK an optimistic message if the API call fails.
+  removeMessage: (taskId: string, messageId: string) => void;
+  // setTaskLoading — toggles the loading spinner for a specific task's chat.
+  setTaskLoading: (taskId: string, loading: boolean) => void;
+
 }
 
 export const useDashboardStore = create<DashboardStore>((set) => ({
@@ -108,4 +134,74 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
         //11.Current dashboard view
     currentDashboardView: CurrentView.KANBAN,
     setCurrentDashboardView: (view: CurrentView) => set({currentDashboardView: view}),
+
+    // 12.Setting drawer toggle 
+    isSettingDrawerOpen: true,
+    toggleSettingDrawer: () => set((state)=>
+    ({isSettingDrawerOpen: !state.isSettingDrawerOpen})),
+
+     // ── 13. CHAT SLICE IMPLEMENTATIONS ────────────────────────────────────────
+
+  taskChats: {},
+ 
+  setTaskMessages: (taskId, messages) =>
+    set((state) => ({
+      taskChats: {
+        ...state.taskChats,            
+        [taskId]: {messages, isLoading: false },
+      },
+    })),
+ 
+  // appendMessage
+  appendMessage: (taskId, message) =>
+    set((state) => ({
+      taskChats: {
+        ...state.taskChats,
+        [taskId]: {
+          isLoading: state.taskChats[taskId]?.isLoading ?? false,
+          messages: [
+            ...(state.taskChats[taskId]?.messages ?? []), // existing messages or empty array
+            message,                                       // new message goes at the END
+          ],
+        },
+      },
+    })),
+ 
+  replaceOptimisticMessage: (taskId, optimisticId, real) =>
+    set((state) => ({
+      taskChats: {
+        ...state.taskChats,
+        [taskId]: {
+          isLoading: state.taskChats[taskId]?.isLoading ?? false,
+          messages: (state.taskChats[taskId]?.messages ?? []).map(
+            (m) => (m.id === optimisticId ? real : m)
+          ),
+        },
+      },
+    })),
+
+  removeMessage: (taskId, messageId) =>
+    set((state) => ({
+      taskChats: {
+        ...state.taskChats,
+        [taskId]: {
+          isLoading: state.taskChats[taskId]?.isLoading ?? false,
+          messages: (state.taskChats[taskId]?.messages ?? []).filter(
+            (m) => m.id !== messageId
+          ),
+        },
+      },
+    })),
+ 
+  setTaskLoading: (taskId, loading) =>
+    set((state) => ({
+      taskChats: {
+        ...state.taskChats,
+        [taskId]: {
+          messages: state.taskChats[taskId]?.messages ?? [],
+          isLoading: loading,
+        },
+      },
+    })),
 }));
+ 

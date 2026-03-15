@@ -22,6 +22,8 @@ import { CurrentView, useDashboardStore } from "@/app/store/dashboardStore"
 export function NavMain() {
 
   const setCurrentDashboardView = useDashboardStore((state) => state.setCurrentDashboardView)
+  const toggleSettingDrawer = useDashboardStore((state) => state.toggleSettingDrawer)
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
@@ -47,7 +49,7 @@ export function NavMain() {
                 </SidebarMenuButton>  
             </SidebarMenuItem>
 
-            <SidebarMenuItem>
+            <SidebarMenuItem onClick={toggleSettingDrawer}>
                 <SidebarMenuButton tooltip="Settings">
                   <Settings/>
                   <span>Settings</span>
