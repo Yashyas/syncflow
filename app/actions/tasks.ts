@@ -20,37 +20,20 @@ export async function createTask(formData: FormData, project:Project){
     if(!title ) return {error:"Title is required"}
 
     try {
-        const projectExists = await prisma.project.findFirst({
-            where: {
-                id: project.id,
-                freelancerId: session.user.id,
-            }
-        })
-        if (!projectExists) {
-            return { error: "Project not found" }
-        }
-
-        const exisistingTask = await prisma.task.findFirst({
-            where: {
-                title,
-                projectId: project.id,
-            }
-        })
-        if (exisistingTask) {
-            return { error: "Task with this title already exists for this client" }
-        }
-        
         const task = await prisma.task.create({
-            data:{
-                title,
-                description,
-                status,
-                projectId : project.id,
-            }
-        })
-        if (task) {
-            return {message: "Task created successfully",task}   
+      data: {
+        title,
+        description,
+        status,
+        project: {
+          connect: {
+            id: project.id,
+            freelancerId: session.user.id,
+          }
         }
+      }
+    })
+    return { message: "Task created successfully", task }
 
     } catch (error) {
         return {error: "Failed to create task"}
@@ -103,16 +86,12 @@ export async function updateTask(task: Task,data:Data){
 
         try {
             // checking project ownership 
-            const project = await prisma.project.findUnique({
-                where: {
-                    id: task.projectId,
-                    freelancerId: session.user.id,
-                }
-            })
-            if(!project){return {error: "Failed to update task details"}}
-
             const updatedTask = await prisma.task.update({
-                where: {id : task.id},
+                where: { id: task.id,
+                         project:{
+                            freelancerId: session.user.id,
+                            }
+                        },
                 data: updateData
             })
             return {message: "Task updated successfully",updatedTask}
@@ -121,7 +100,32 @@ export async function updateTask(task: Task,data:Data){
         }
 }
 
-// Delete Task 
+// trash task by changing status 
+export async function trashTask(task: Task){
+     const session = await getServerSession(authOptions)
+        if (!session || !session.user.id){
+            redirect("/api/auth/login")   
+        }
+
+        try {
+            // combined ownership check + status change 
+            const updatedTask = await prisma.task.update({
+                where: { id: task.id,
+                         project:{
+                            freelancerId: session.user.id,
+                            }
+                        },
+                data: {
+                    status: 'scraped'
+                }
+            })
+            return {message: "Task moved to Trash",updatedTask}
+        } catch (error) {
+            return{error: "Failed to move to Trash"}
+        }
+}
+
+// Permanent Delete Task 
 export async function deleteTask(task: Task){
      const session = await getServerSession(authOptions)
         if (!session || !session.user.id){
@@ -129,18 +133,12 @@ export async function deleteTask(task: Task){
         }
         try {
             // checking project ownership 
-            const project = await prisma.project.findUnique({
-                where: {
-                    id: task.projectId,
-                    freelancerId: session.user.id,
-                }
-            })
-            if(!project){return {error: "Failed to delete task details"}}
-
-             await prisma.task.delete({
-                where: {
-                    id : task.id,
-                    projectId :task.projectId
+            await prisma.task.delete({
+                where: { 
+                    id: task.id,
+                    project:{
+                        freelancerId: session.user.id,
+                    }
                 }
             })
             return {message: "Task deleted successfully"}

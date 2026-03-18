@@ -1,5 +1,5 @@
 "use client"
-import { deleteTask } from "@/app/actions/tasks";
+import { deleteTask, trashTask } from "@/app/actions/tasks";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -37,7 +37,7 @@ export default function DeleteTask() {
 
         try {
             if(!selectedTask) return null
-            const result = await deleteTask(selectedTask);
+            const result = await trashTask(selectedTask);
             setLoading(false);
             toast.success(result?.message || "Project deleted successfully");
             toggleDeleteTaskDrawer();
@@ -57,7 +57,7 @@ export default function DeleteTask() {
                     <DialogHeader>
                         <DialogTitle>Are you sure you want to delete this task?</DialogTitle>
                         <DialogDescription className="text-red-600">
-                            This action cannot be undone !!
+                            Task will be moved to Trash !!
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter className="mt-4">

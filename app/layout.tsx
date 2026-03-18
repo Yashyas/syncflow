@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Asimovian, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { toast, Toaster } from "sonner";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Providers } from "@/components/Provider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const asimovian = Asimovian({
+  weight: "400",
+  variable: "--font-asimovian",
   subsets: ["latin"],
 });
 
@@ -29,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${asimovian.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider
           attribute="class"
