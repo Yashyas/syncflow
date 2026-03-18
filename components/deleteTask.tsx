@@ -28,7 +28,7 @@ export default function DeleteTask() {
     const isDeleteTaskDrawerOpen = useDashboardStore((state) => state.isDeleteTaskDrawerOpen)
     const toggleDeleteTaskDrawer = useDashboardStore((state) => state.toggleDeleteTaskDrawer)
 
-    const removeTask = useDashboardStore((state) => state.removeTask)
+    const updateTask = useDashboardStore((state) => state.updateTask)
 
     async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -42,7 +42,7 @@ export default function DeleteTask() {
             toast.success(result?.message || "Project deleted successfully");
             toggleDeleteTaskDrawer();
             // delete task from zustand store 
-            removeTask(selectedTask.id)
+            updateTask({ ...selectedTask, status: "scraped" });
                         
         } catch (error) {
             toast.error("Failed to delete project");

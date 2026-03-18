@@ -125,6 +125,31 @@ export async function trashTask(task: Task){
         }
 }
 
+// restore task 
+export async function restoreTask(task: Task){
+     const session = await getServerSession(authOptions)
+        if (!session || !session.user.id){
+            redirect("/api/auth/login")   
+        }
+
+        try {
+            // combined ownership check + status change 
+            const updatedTask = await prisma.task.update({
+                where: { id: task.id,
+                         project:{
+                            freelancerId: session.user.id,
+                            }
+                        },
+                data: {
+                    status: "pending"
+                }
+            })
+            return {success: true}
+        } catch (error) {
+            return{error: "Failed To Restore Task"}
+        }
+}
+
 // Permanent Delete Task 
 export async function deleteTask(task: Task){
      const session = await getServerSession(authOptions)
@@ -141,7 +166,7 @@ export async function deleteTask(task: Task){
                     }
                 }
             })
-            return {message: "Task deleted successfully"}
+            return {success: true}
         } catch (error) {
             return{error: "Failed to delete task details"}
         }

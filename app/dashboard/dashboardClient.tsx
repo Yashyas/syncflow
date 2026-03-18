@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button'
 import { Activity, CirclePlus, Edit, FolderInput, FolderX, Lightbulb, ListTodo, MessageSquare, Share, Trash } from 'lucide-react'
 import ChatWindow  from '@/components/chatWindow'
 import Setting from '@/components/setting'
+import TrashPage from '@/components/trash-page'
 
 export default function DashboardClient() {
   const selectedProject = useDashboardStore((state) => state.selectedProject)
@@ -66,10 +67,10 @@ export default function DashboardClient() {
             <div className='flex items-center justify-around top-0 sticky h-10 hidden md:flex '>
               <ButtonGroup>
 
-                <ButtonGroup className={`${currentDashboardView === CurrentView.CHAT ? "hidden" : "flex"}`}>
+                <ButtonGroup className={`${currentDashboardView === CurrentView.CHAT || currentDashboardView === CurrentView.TRASH ? "hidden" : "flex"}`}>
                   <Button onClick={toggleAddTaskDrawer}><CirclePlus />Task</Button>
                   <Separator orientation='vertical' />
-                  <Button ><Trash /> Trash</Button>
+                  <Button onClick={() => setCurrentDashboardView(CurrentView.TRASH)}><Trash /> Trash</Button>
                 </ButtonGroup>
 
                 <ButtonGroup>
@@ -97,10 +98,10 @@ export default function DashboardClient() {
              <div className='flex items-center justify-center top-0 sticky h-10 sm:hidden '>
               <ButtonGroup className='flex max-w-[80vw]'>
 
-                <ButtonGroup className={`${currentDashboardView === CurrentView.CHAT ? "hidden" : "flex"}`}>
+                <ButtonGroup className={`${currentDashboardView === CurrentView.CHAT || currentDashboardView === CurrentView.TRASH ? "hidden" : "flex"}`}>
                   <Button onClick={toggleAddTaskDrawer}><CirclePlus />Task</Button>
                   <Separator orientation='vertical' />
-                  <Button ><Trash /></Button>
+                  <Button onClick={() => setCurrentDashboardView(CurrentView.TRASH)} ><Trash /></Button>
                 </ButtonGroup>
 
                 <ButtonGroup>
@@ -125,6 +126,7 @@ export default function DashboardClient() {
           {/* conditional rendering of dashboard views  */}
           {currentDashboardView === CurrentView.KANBAN && <KanbanBoard />}
           {currentDashboardView === CurrentView.CHAT && <ChatWindow/>}
+          {currentDashboardView === CurrentView.TRASH && <TrashPage/>}
         </SidebarInset>
       </SidebarProvider>
     </div>

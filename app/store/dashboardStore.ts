@@ -4,7 +4,8 @@ import { create } from "zustand/react";
 export enum CurrentView {
   KANBAN = "KANBAN",
   CHAT = "CHAT",
-  ACTIVITY = "ACTIVITY",
+  IDEAS = "IDEAS",
+  TRASH = "TRASH"
 }
 
 // interface extended for message count 
