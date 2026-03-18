@@ -1,10 +1,7 @@
-"use client";
-
+"use client"
 import { useEffect, useRef, useState, useCallback } from "react";
-
 import { getMessages, sendMessage } from "@/app/actions/messages";
 import pusherClient from "@/lib/pusher-client";
-
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea }   from "@/components/ui/textarea";
 import { Button }     from "@/components/ui/button";
@@ -23,8 +20,8 @@ export interface Message {
   content: string;
   sender: Sender;
   taskId: string;
-  createdAt: any; // or Date
-  updatedAt: any; // or Date
+  createdAt: any; 
+  updatedAt: any; 
 }
 
 interface ChatWindowProps {

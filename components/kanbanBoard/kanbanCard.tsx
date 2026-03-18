@@ -4,9 +4,15 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card
 import { MessageSquareText, SquarePen, Trash2 } from "lucide-react";
 import { CurrentView, useDashboardStore } from "@/app/store/dashboardStore";
 import UpdateTask from "../updateTask";
+import { Badge } from "../ui/badge";
 
+interface TaskWithCount extends Task{
+  _count?:{
+    messages:number;
+  }
+}
 interface KanbanCardProps {
-    task: Task
+    task: TaskWithCount
     overlay? : boolean
 }
 
@@ -19,8 +25,9 @@ export default function KanbanCard({task , overlay = false} : KanbanCardProps){
        const toggleDeleteTaskDrawer = useDashboardStore((state) => state.toggleDeleteTaskDrawer)
        const setCurrentDashboardView = useDashboardStore((state) => state.setCurrentDashboardView)
       
+       const messageCount = task._count?.messages ?? 0
 
-      function handleClick(){
+      function handleClick(){ 
         setSelectedTask(task)
         toggleUpdateTaskDrawer()
       }
@@ -54,7 +61,14 @@ export default function KanbanCard({task , overlay = false} : KanbanCardProps){
                 
                 <Trash2 className="mr-auto" onClick={handleDelete}/>
                 <SquarePen onClick={handleClick}/>
-                <MessageSquareText onClick={handleChat}/>
+                <div className="relative" onClick={handleChat}>
+                    <MessageSquareText />
+                    {messageCount > 0 && (
+                        <Badge className="absolute -top-2 -right-2 h-4 w-4 p-0 flex items-center justify-center text-[10px]">
+                            {messageCount > 99 ? '99+' : messageCount}
+                        </Badge>
+                    )}
+                </div>
             </CardFooter>
         </Card>
         </>

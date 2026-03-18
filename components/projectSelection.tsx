@@ -77,9 +77,9 @@ export default function ProjectSelection() {
                         <Spinner />
                     </div>
                 )}
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-4 p-2 mt-4 overflow-y-auto'>
-                    <Card className='shadow-none border-2 border-dashed hidden md:grid cursor-pointer hover:bg-primary hover:text-primary-foreground text-muted-foreground' onClick={handleCreateProject}>
-                        <CardContent className='flex items-center justify-center h-full text-center  gap-2'>
+                <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 p-2 mt-4 overflow-y-auto ${loading ? "hidden" : "flex"}`}>
+                    <Card className="shadow-none border-2 border-dashed hidden md:grid cursor-pointer hover:bg-primary hover:text-primary-foreground text-muted-foreground " onClick={handleCreateProject}>
+                        <CardContent className="flex items-center justify-center h-full text-center gap-2 ">
                             <CirclePlus />
                             <p className='text-lg font-semibold'>Create a new project</p>
                         </CardContent>
@@ -92,7 +92,7 @@ export default function ProjectSelection() {
 
                     ))}
                 </div>
-                <DialogFooter className='ml-auto'>
+                <DialogFooter className='ml-auto mt-auto'>
                     <div className='flex gap-1 w-fit bg-primary text-accent-foreground rounded-sm p-2 hover:bg-secondary' onClick={handleCreateProject}>
                         <CirclePlus />
                         <p className='text-sm '>Create</p>

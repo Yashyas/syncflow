@@ -113,6 +113,7 @@ enum TaskStatus {
   scraped
   for_verification
   completed
+  central_chat
 }
 
 model Task {

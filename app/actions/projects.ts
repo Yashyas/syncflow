@@ -39,6 +39,13 @@ export async function createProject(formData: FormData){
                 client,
                 sharingPassword,
                 freelancerId,
+                tasks:{
+                    create : {
+                        title: `${client} & ${session.user.name} Chat`,
+                        description: `Direct communication channel for ${title}.`,
+                        status: "central_chat",
+                    }
+                }
             }
         })
         if (project) {

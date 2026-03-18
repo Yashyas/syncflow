@@ -70,7 +70,14 @@ export async function getProjectTaskData(projectId: string,sharingPassword: stri
                     id: projectId,
                     sharingPassword: sharingPassword
                 },
-                include:{tasks: true}
+                include:{
+                    tasks: {
+                        include:{
+                            _count: {
+                                select : {messages: true}
+                            }
+                        }
+                }}
             })
             return {tasksData}
         } catch (error) {

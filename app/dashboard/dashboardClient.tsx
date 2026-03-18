@@ -4,13 +4,13 @@ import ProjectSelection from '@/components/projectSelection'
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
 import { Separator } from '@/components/ui/separator'
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
-import { CurrentView, useDashboardStore } from '../store/dashboardStore'
+import { CurrentView, useCentralChatTask, useDashboardStore } from '../store/dashboardStore'
 import DeleteProject from '@/components/deleteProject'
 import { ShareProject } from '@/components/shareProject'
 import KanbanBoard from '@/components/kanbanBoard/kanbanBoard'
 import { ButtonGroup } from '@/components/ui/button-group'
 import { Button } from '@/components/ui/button'
-import { Activity, CirclePlus, Edit, FolderInput, FolderX, Lightbulb, MessageSquare, Share, Trash } from 'lucide-react'
+import { Activity, CirclePlus, Edit, FolderInput, FolderX, Lightbulb, ListTodo, MessageSquare, Share, Trash } from 'lucide-react'
 import ChatWindow  from '@/components/chatWindow'
 import Setting from '@/components/setting'
 
@@ -22,9 +22,17 @@ export default function DashboardClient() {
   const toggleShareProjectDrawer = useDashboardStore((state) => state.toggleShareProjectDrawer)
   const currentDashboardView = useDashboardStore((state) => state.currentDashboardView)
   const setCurrentDashboardView = useDashboardStore((state) => state.setCurrentDashboardView)
+  const setSelectedTask = useDashboardStore((state) => state.setSelectedTask)
+  const centralChat = useCentralChatTask()
 
-
+  function messageOnClick(){   
+      if(centralChat){
+          setSelectedTask(centralChat)
+      }
+      setCurrentDashboardView(CurrentView.CHAT)
+    }
   return (
+
     <div>
       <ProjectSelection />
       <DeleteProject />
@@ -58,21 +66,21 @@ export default function DashboardClient() {
             <div className='flex items-center justify-around top-0 sticky h-10 hidden md:flex '>
               <ButtonGroup>
 
-                <ButtonGroup>
+                <ButtonGroup className={`${currentDashboardView === CurrentView.CHAT ? "hidden" : "flex"}`}>
                   <Button onClick={toggleAddTaskDrawer}><CirclePlus />Task</Button>
                   <Separator orientation='vertical' />
                   <Button ><Trash /> Trash</Button>
                 </ButtonGroup>
 
                 <ButtonGroup>
-                  <Button onClick={ () => setCurrentDashboardView(CurrentView.CHAT)} ><MessageSquare /> Message</Button>
+                  <Button onClick={messageOnClick} ><MessageSquare /> Message</Button>
                   <Separator orientation='vertical' />
-                  <Button><Activity />Activity</Button>
+                  <Button onClick={ () => setCurrentDashboardView(CurrentView.KANBAN)}><ListTodo/> Tasks</Button>
                   <Separator orientation='vertical' />
-                  <Button onClick={ () => setCurrentDashboardView(CurrentView.KANBAN)}><Lightbulb />Ideas</Button>
+                  <Button><Lightbulb />Ideas</Button>
                 </ButtonGroup>
 
-                <ButtonGroup>
+                <ButtonGroup className={`${currentDashboardView === CurrentView.CHAT ? "hidden" : "flex"}`}>
                   <Button onClick={toggleShareProjectDrawer}><Share /> Share</Button>
                   <Separator orientation='vertical' />
                   <Button><Edit /></Button>
@@ -89,17 +97,21 @@ export default function DashboardClient() {
              <div className='flex items-center justify-center top-0 sticky h-10 sm:hidden '>
               <ButtonGroup className='flex max-w-[80vw]'>
 
-                <ButtonGroup>
+                <ButtonGroup className={`${currentDashboardView === CurrentView.CHAT ? "hidden" : "flex"}`}>
                   <Button onClick={toggleAddTaskDrawer}><CirclePlus />Task</Button>
                   <Separator orientation='vertical' />
                   <Button ><Trash /></Button>
                 </ButtonGroup>
 
                 <ButtonGroup>
-                  <Button onClick={ () => setCurrentDashboardView(CurrentView.CHAT)} ><MessageSquare /></Button>
+                  <Button onClick={messageOnClick} ><MessageSquare /></Button>
+                  <Separator orientation='vertical' />
+                  <Button onClick={() => setCurrentDashboardView(CurrentView.KANBAN)} className={`${currentDashboardView === CurrentView.KANBAN ? "hidden" : "flex"}`}> <ListTodo/> </Button>
+                  <Separator orientation='vertical'/>
+                  <Button><Lightbulb/></Button>
                 </ButtonGroup>
 
-                <ButtonGroup>
+                <ButtonGroup className={`${currentDashboardView === CurrentView.CHAT ? "hidden" : "flex"}`}>
                   <Button onClick={toggleShareProjectDrawer}><Share /></Button>
                   <Separator orientation='vertical' />
                   <Button><Edit /></Button>

@@ -14,6 +14,12 @@ import DeleteTask from '../deleteTask'
 import { Button } from '../ui/button'
 import { CirclePlus } from 'lucide-react'
 
+interface TaskWithCount extends Task{
+  _count?:{
+    messages:number;
+  }
+}
+
 export default function KanbanBoard() {
     
     // 7. from zustand store task array 
@@ -22,7 +28,7 @@ export default function KanbanBoard() {
     const editedTask = useDashboardStore((state)=> state.updateTask)
 
     const selectedProject = useDashboardStore((state)=> state.selectedProject)
-    const [activeTask,setActiveTask] = useState<Task | null>(null)
+    const [activeTask,setActiveTask] = useState<TaskWithCount | null>(null)
 
     const sensors = useSensors(
         useSensor(TouchSensor,{
