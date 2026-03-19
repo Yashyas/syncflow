@@ -8,11 +8,17 @@ import { Button } from "../ui/button"
 import { CirclePlus } from "lucide-react"
 import { useDashboardStore } from "@/app/store/dashboardStore"
 
+interface TaskWithCount extends Task{
+  _count?:{
+    messages:number;
+  }
+}
 interface KanbanColumnProps{
     id: TaskStatus
     label: string
-    tasks: Task[]
+    tasks: TaskWithCount[]
 }
+
 export default function KanbanColumn({id,label,tasks}: KanbanColumnProps) {
         const {setNodeRef,isOver} =useDroppable({id})
         const toggleAddTaskDrawer = useDashboardStore((state) => state.toggleAddTaskDrawer)
@@ -20,7 +26,7 @@ export default function KanbanColumn({id,label,tasks}: KanbanColumnProps) {
   return (
     <div className="flex flex-col p-2 w-full h-[90vh]  ">
       <div className="flex justify-center mb-1 ">
-        <div className="bg-primary py-1 px-2 rounded">{label}</div>
+        <div className="bg-primary py-1 px-2 rounded text-accent">{label}</div>
         </div>
       {/* <Separator/> */}
       <div className="h-auto w-90 lg:w-full ">

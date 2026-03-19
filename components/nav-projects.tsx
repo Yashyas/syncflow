@@ -30,7 +30,7 @@ export function NavProjects() {
     <SidebarGroup className="group-data-[collapsible=icon]:hidden mt-auto mb-8">
       <SidebarGroupLabel>Current Project</SidebarGroupLabel>
       <SidebarMenu>
-        <Card className="w-full flex-row items-center bg-primary p-4 border-0 rounded-none">
+        <Card className="w-full flex-row items-center bg-primary p-4 border-0 rounded-none text-accent">
           <div className="flex items-center">
             <FolderOpenDot className="ml-2 h-6"/>
           <p className="ml-2 ">{selectedProject?.title}</p>

@@ -49,7 +49,7 @@ export default function KanbanCard({task , overlay = false} : KanbanCardProps){
             ref={setNodeRef}
             {...listeners}
             {...attributes}
-            className={`cursor-grab active:cursor-grabbing my-2 w-full py-4 transition-all ${isDragging && !overlay ? 'opacity-40 border border-ring shadow' : 'opacity-100'} ${overlay ? 'rotate-2 scale-105':''}`}
+            className={`cursor-grab active:cursor-grabbing my-2 w-full py-4 hover:bg-accent transition-all ${isDragging && !overlay ? 'opacity-40 border border-ring shadow' : 'opacity-100'} ${overlay ? 'rotate-2 scale-105':''}`}
             >
             <CardHeader className="">
                 <CardTitle>{task.title}</CardTitle>
@@ -59,9 +59,9 @@ export default function KanbanCard({task , overlay = false} : KanbanCardProps){
             </CardContent>
             <CardFooter className=" flex gap-2 justify-end">
                 
-                <Trash2 className="mr-auto" onClick={handleDelete}/>
-                <SquarePen onClick={handleClick}/>
-                <div className="relative" onClick={handleChat}>
+                <Trash2 className="mr-auto hover:text-destructive hover:rotate-12 ease-in-out" onClick={handleDelete}/>
+                <SquarePen onClick={handleClick} className="hover:text-primary hover:rotate-12 ease-in-out"/>
+                <div className="relative hover:text-primary hover:rotate-12 ease-in-out" onClick={handleChat}>
                     <MessageSquareText />
                     {messageCount > 0 && (
                         <Badge className="absolute -top-2 -right-2 h-4 w-4 p-0 flex items-center justify-center text-[10px]">

@@ -77,7 +77,7 @@ function TrashCard({ task }: TrashCardProps) {
         <Button
           variant=""
           size="icon"
-          className="mr-auto  hover:bg-destructive"
+          className="mr-auto  hover:bg-destructive "
           onClick={handleDelete}
           disabled={isPendingDelete || isPendingRestore}
           title="Delete permanently"
@@ -89,7 +89,7 @@ function TrashCard({ task }: TrashCardProps) {
         <Button
           variant=""
           size="icon"
-          className="hover:bg-secondary"
+          className="hover:bg-secondary hover:text-accent-foreground"
           onClick={handleRestore}
           disabled={isPendingRestore || isPendingDelete}
           title="Restore to pending"
@@ -101,7 +101,7 @@ function TrashCard({ task }: TrashCardProps) {
         <Button
           variant=""
           size="icon"
-          className="relative hover:bg-secondary"
+          className="relative hover:bg-secondary hover:text-accent-foreground"
           onClick={handleChat}
           title="Open chat"
         >

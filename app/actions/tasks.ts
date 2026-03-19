@@ -5,7 +5,6 @@ import { TaskStatus } from "@/lib/generated/prisma/enums"
 import { prisma } from "@/lib/prisma"
 import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
-import { title } from "process"
 
 export async function createTask(formData: FormData, project:Project){
     const session = await getServerSession(authOptions)

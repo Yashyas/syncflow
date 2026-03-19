@@ -93,7 +93,7 @@ export default function ProjectSelection() {
                     ))}
                 </div>
                 <DialogFooter className='ml-auto mt-auto'>
-                    <div className='flex gap-1 w-fit bg-primary text-accent-foreground rounded-sm p-2 hover:bg-secondary' onClick={handleCreateProject}>
+                    <div className='flex gap-1 w-fit bg-primary text-accent rounded-sm p-2 hover:bg-secondary hover:text-accent-foreground ' onClick={handleCreateProject}>
                         <CirclePlus />
                         <p className='text-sm '>Create</p>
                     </div>
