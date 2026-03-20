@@ -20,7 +20,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { getClientProject } from "@/app/actions/projects"; 
+import { getClientProject } from "@/app/actions/client-actions"; 
 import { useClientSessionStore } from "../store/clientStore";
 import { toast } from "sonner";
 

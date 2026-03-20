@@ -90,8 +90,8 @@ export function TaskTable() {
     
 
   return (
-    <div className="p-8 ">
-   <Table className="border-2 border-dashed p-2 ">
+    <div className="my-4 ">
+   <Table className="border-2 p-2 rounded-2xl">
   <TableHeader className="bg-primary ">
     <TableRow>
       <TableHead className="w-[100px] text-primary-foreground">Task</TableHead>
@@ -134,7 +134,7 @@ export function TaskTable() {
               className="relative hover:text-primary hover:rotate-12 ease-in-out cursor-pointer inline-flex" 
               onClick={() =>handleChat(task as TaskWithCount)}
             >
-              <MessageDrawer/>
+              <MessageDrawer><MessageSquareText/></MessageDrawer>
               {(task._count?.messages ?? 0) > 0 && (
                 <Badge className="absolute -top-2 -right-2 h-4 w-4 p-0 flex items-center justify-center text-[10px]">
                   {(task._count?.messages ?? 0) > 99

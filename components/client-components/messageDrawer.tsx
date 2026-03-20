@@ -16,12 +16,12 @@ import { MessageSquareText, Minus, Plus } from "lucide-react"
 import ClientChat from "./clientChat"
 
 
-export function MessageDrawer() {
+export function MessageDrawer({ children }: { children: React.ReactNode }) {
 
   return (
     <Drawer direction="right" >
       <DrawerTrigger asChild>
-        <MessageSquareText/>
+        {children}
       </DrawerTrigger>
       <DrawerContent>
             <ClientChat/>

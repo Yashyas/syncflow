@@ -100,7 +100,7 @@ export default function TaskDonutChart() {
         }));
 
   return (
-    <Card className="w-full max-w-[30vw] shadow-sm">
+    <Card className="w-full md:max-w-[33vw] shadow-sm">
       <CardHeader className="pb-2">
         <CardTitle className="text-base font-semibold tracking-tight">
           Task Overview
@@ -110,7 +110,7 @@ export default function TaskDonutChart() {
         </p>
       </CardHeader>
 
-      <CardContent className="flex flex-row items-center gap-5">
+      <CardContent className="flex flex-col lg:flex-row items-center gap-5">
         {/* ── Donut ── */}
         <div className="relative h-44 w-full">
           <ResponsiveContainer width="100%" height="100%">
