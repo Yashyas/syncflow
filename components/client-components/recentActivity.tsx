@@ -146,7 +146,7 @@ export default function RecentActivity() {
   }, [entries]);
 
   return (
-    <Card className="w-full shadow-sm flex flex-col max-h-[80vh]" >
+    <Card className="w-full shadow-sm flex flex-col max-h-[70vh]" >
       <CardHeader className="pb-2 shrink-0">
         <CardTitle className="text-base font-semibold tracking-tight">
           Recent activity
