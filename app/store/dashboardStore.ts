@@ -91,6 +91,9 @@ interface DashboardStore {
   // setTaskLoading — toggles the loading spinner for a specific task's chat.
   setTaskLoading: (taskId: string, loading: boolean) => void;
 
+    // 14.Add Project drawer toggle
+  isUpdateProjectDrawerOpen: boolean;
+  toggleUpdateProjectDrawer: () => void;
 
 }
 
@@ -231,6 +234,11 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
         },
       },
     })),
+
+      // 14. Add task drawer toggle
+  isUpdateProjectDrawerOpen: false,
+  toggleUpdateProjectDrawer: () =>
+    set((state) => ({ isUpdateProjectDrawerOpen: !state.isUpdateProjectDrawerOpen })),
 
     
 }));

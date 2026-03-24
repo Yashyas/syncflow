@@ -14,11 +14,13 @@ import { Activity, CirclePlus, Edit, FolderInput, FolderX, Lightbulb, ListTodo, 
 import ChatWindow  from '@/components/chatWindow'
 import Setting from '@/components/setting'
 import TrashPage from '@/components/trash-page'
+import UpdateProjectDrawer from '@/components/updateProject'
 
 export default function DashboardClient() {
   const selectedProject = useDashboardStore((state) => state.selectedProject)
   const toggleProjectSelectionDrawer = useDashboardStore((state) => state.toggleProjectSelectionDrawer)
   const toggleAddTaskDrawer = useDashboardStore((state) => state.toggleAddTaskDrawer)
+  const toggleUpdateProjectDrawer = useDashboardStore((state) => state.toggleUpdateProjectDrawer)
   const toggleDeleteProjectDrawer = useDashboardStore((state) => state.toggleDeleteProjectDrawer)
   const toggleShareProjectDrawer = useDashboardStore((state) => state.toggleShareProjectDrawer)
   const currentDashboardView = useDashboardStore((state) => state.currentDashboardView)
@@ -38,6 +40,7 @@ export default function DashboardClient() {
       <ProjectSelection />
       <DeleteProject />
       <ShareProject />
+      <UpdateProjectDrawer/>
       <Setting />
       {/* Sidebar and breadcrums  */}
     
@@ -84,7 +87,7 @@ export default function DashboardClient() {
                 <ButtonGroup className={`${currentDashboardView === CurrentView.CHAT ? "hidden" : "flex"}`}>
                   <Button onClick={toggleShareProjectDrawer}><Share /> Share</Button>
                   <Separator orientation='vertical' />
-                  <Button><Edit /></Button>
+                  <Button onClick={toggleUpdateProjectDrawer}><Edit /></Button>
                   <Separator orientation='vertical' />
                   <Button onClick={toggleProjectSelectionDrawer}><FolderInput />Change Project</Button>
                   <Separator orientation='vertical' />

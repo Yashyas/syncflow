@@ -1,5 +1,6 @@
 "use server"
 import { authOptions } from "@/lib/auth"
+import { Project } from "@/lib/generated/prisma/client"
 import { prisma } from "@/lib/prisma"
 import { getServerSession } from "next-auth"
 import { revalidatePath } from "next/cache"
@@ -123,3 +124,35 @@ export async function getUserProjectData(projectId: string){
         }
 }
 
+
+// Update project 
+interface Data {
+    title?:string | null ;
+    description?:string | null;
+    client?:string | null;
+    sharingPassword?:string ;
+}
+
+export async function updateProject(project: Project,data:Data){
+     const session = await getServerSession(authOptions)
+        if (!session || !session.user.id){
+            redirect("/api/auth/login")   
+        }
+        const updateData: any = {}
+        if(data.title) updateData.title =data.title
+        if(data.description) updateData.description = data.description
+        if(data.client) updateData.client =data.client
+        if(data.sharingPassword) updateData.sharingPassword =data.sharingPassword
+
+
+        try {
+            // checking project ownership 
+            const updatedProject = await prisma.project.update({
+                where: { id: project.id, freelancerId: session.user.id,},
+                data: updateData
+            })
+            return {message: "Project updated successfully",updatedProject}
+        } catch (error) {
+            return{error: "Failed to update project details"}
+        }
+}
