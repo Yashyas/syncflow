@@ -93,10 +93,10 @@ export default function TaskDonutChart() {
   const chartData =
     total === 0
       ? [{ name: "No tasks", value: 1, color: "var(--muted)" }]
-      : STAGES.filter((s) => counts[s.key] > 0).map((s, i) => ({
+      : STAGES.filter((s) => counts[s.key] > 0).map((s) => ({
           name: s.label,
           value: counts[s.key],
-          color: resolvedColors[i],
+          color: resolvedColors[STAGES.indexOf(s)],
         }));
 
   return (

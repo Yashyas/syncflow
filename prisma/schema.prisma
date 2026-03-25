@@ -97,8 +97,9 @@ model Project{
   description String?
   freelancerId     String   @db.ObjectId
   tasks        Task[]
+  ideas        Idea[]
   // Client sharing password
-  sharingPassword    String?
+  sharingPassword    String
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -148,4 +149,21 @@ model Message {
 
   task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
   @@index([taskId])
+}
+
+enum IdeaType {
+  TEXT
+  URL
+  IMAGE
+}
+model Idea {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  type      IdeaType
+  content   String
+  caption   String?
+  projectId String  @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  @@index([projectId])
 }

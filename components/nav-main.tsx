@@ -42,7 +42,7 @@ export function NavMain() {
                 </SidebarMenuButton>  
             </SidebarMenuItem>
 
-            <SidebarMenuItem>
+            <SidebarMenuItem onClick={ () => setCurrentDashboardView(CurrentView.IDEAS)}>
                 <SidebarMenuButton tooltip="Ideas">
                   <Lightbulb/>
                   <span>Ideas</span>
