@@ -23,9 +23,9 @@ export const ourFileRouter = {
     .onUploadComplete(async ({ metadata, file }) => {
       // You can optionally auto-create the Idea record here,
       // but we'll do it in the server action for consistency
-      console.log("Upload complete for project:", metadata.projectId);
+      console.log("Upload complete for project:", metadata.project);
       console.log("File URL:", file.url);
-      return { uploadedBy: metadata.projectId, url: file.url };
+      return { uploadedBy: metadata.project, url: file.url };
     }),
 } satisfies FileRouter;
 
