@@ -8,11 +8,15 @@ import ClientProjectCard from "@/components/client-components/clientProjectCard"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ActivitySquare, Lightbulb, ListTodo } from "lucide-react";
 import IdeasPage from "@/components/IdeaPage";
+import { redirect } from "next/navigation";
 
 
 export default function ClientDashboard() {
   const { clearProject , project } =useClientSessionStore();
   console.log(project)
+  if (!project){
+    redirect("/client")
+  }
   return (
     <div>
       <div className="text-center p-2 text-2xl border-2 bg-primary text-background"><p>Client Dashboard</p></div>
