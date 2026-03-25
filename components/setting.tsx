@@ -1,44 +1,50 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Button } from "@/components/ui/button"
+import * as React from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/drawer";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
-import { cn } from "@/lib/utils"
-import { useIsMobile } from "@/hooks/use-mobile"
-import { useDashboardStore } from "@/app/store/dashboardStore"
-import { NavUser } from "./nav-user"
-import { signOut,useSession } from "next-auth/react"
-import { Avatar, AvatarFallback } from "./ui/avatar"
-import { AvatarImage } from "./ui/avatar"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu"
-import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles } from "lucide-react"
-import { Card } from "./ui/card"
+import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useDashboardStore } from "@/app/store/dashboardStore";
+import { signOut, useSession } from "next-auth/react";
+import { Loader2, LogOut, ShieldOff, Trash2, TriangleAlert, User } from "lucide-react";
+import { toast } from "sonner";
+import { updateUser, updatePassword, deleteUser } from "@/app/actions/user"; // adjust path if needed
 
 export default function Setting() {
-  const isMobile = useIsMobile()
-  const toggleSettingDrawer = useDashboardStore((state) => state.toggleSettingDrawer)
-  const isSettingDrawerOpen = useDashboardStore((state) => state.isSettingDrawerOpen)
-  
+  const isMobile = useIsMobile();
+  const toggleSettingDrawer = useDashboardStore((state) => state.toggleSettingDrawer);
+  const isSettingDrawerOpen = useDashboardStore((state) => state.isSettingDrawerOpen);
+
   if (!isMobile) {
     return (
       <Dialog open={isSettingDrawerOpen} onOpenChange={toggleSettingDrawer}>
@@ -46,15 +52,28 @@ export default function Setting() {
           <DialogHeader>
             <DialogTitle>Settings</DialogTitle>
             <DialogDescription>
-              Make changes to your profile here. Click save when you&apos;re
-              done.
+              Make changes to your profile here. Click save when you&apos;re done.
             </DialogDescription>
           </DialogHeader>
-          <UserProfile/>
-          <ProfileForm />
+          <div className="py-4 overflow-y-auto max-h-[70vh]">
+            <ProfileForm />
+          </div>
+          <DialogFooter className="pt-2 flex justify-between">
+            <div className="flex gap-2">
+              <TriangleAlert />
+              <h1>Danger Zone</h1>
+            </div>
+            <div className="pt-2 gap-2 flex flex-row justify-between">
+              <Button className="w-auto" onClick={() => signOut()}>
+                <LogOut />
+                Logout
+              </Button>
+              <DeleteAccountButton />
+            </div>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
-    )
+    );
   }
 
   return (
@@ -66,108 +85,218 @@ export default function Setting() {
             Make changes to your profile here. Click save when you&apos;re done.
           </DrawerDescription>
         </DrawerHeader>
-        {/* profile  */}
-        <UserProfile/>
-        {/* profile form  */}
-        <ProfileForm className="px-4" />
-        <DrawerFooter className="pt-2">
-          <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose>
+        <div className="py-4 overflow-y-auto max-h-[70vh]">
+          <ProfileForm />
+        </div>
+        <DrawerFooter className="pt-2 flex justify-between">
+          <div className="flex gap-2">
+            <TriangleAlert />
+            <h1>Danger Zone</h1>
+          </div>
+          <div className="pt-2  gap-2 flex flex-row justify-between">
+            <Button className="w-auto" onClick={() => signOut()}>
+              <LogOut />
+              Logout
+            </Button>
+            <DeleteAccountButton />
+          </div>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
-  )
+  );
 }
+
+// ─── ProfileForm ──────────────────────────────────────────────────────────────
 
 function ProfileForm({ className }: React.ComponentProps<"form">) {
+  const { data: session, update: updateSession } = useSession();
+
+  // Personal info state
+  const [name, setName] = React.useState(session?.user?.name ?? "");
+  const [email, setEmail] = React.useState(session?.user?.email ?? "");
+  const [isProfilePending, startProfileTransition] = React.useTransition();
+
+  // Sync once session resolves on first render
+  React.useEffect(() => {
+    if (session?.user?.name) setName(session.user.name);
+    if (session?.user?.email) setEmail(session.user.email);
+  }, [session?.user?.name, session?.user?.email]);
+
+  function handleProfileUpdate(e: React.FormEvent) {
+    e.preventDefault();
+    startProfileTransition(async () => {
+      const result = await updateUser(name, email);
+      if (!result.success) {
+        toast.error(result.error);
+        return;
+      }
+      // Refresh the NextAuth JWT/session so sidebar/avatar stays in sync
+      await updateSession({ name: result.data?.name, email: result.data?.email });
+      toast.success("Profile updated successfully.");
+    });
+  }
+
+  // Determine whether this is a credential user (has a password) or pure OAuth.
+  // session.user doesn't expose `password`, so we use a lightweight API call or
+  // simply check whether the user signed in via credentials provider.
+  // The cleanest signal available on the client is session.user — NextAuth's
+  // default session doesn't expose the provider. We expose a `hasPassword` flag
+  // via the session callback in authOptions (see note below).
+  const hasPassword = Boolean((session?.user as { hasPassword?: boolean })?.hasPassword);
+
   return (
-    <div>
-        <h1>Change email</h1>
-    <form className={cn("grid items-start gap-6", className)}>
-      <div className="grid gap-3">
-        <Label htmlFor="email">Email</Label>
-        <Input type="email" id="email" defaultValue="shadcn@example.com" />
+    <div className="flex flex-col gap-2">
+      {/* ── Personal Information ────────────────────────────────────────────── */}
+      <div className="flex gap-2">
+        <User />
+        <h1>Personal Information</h1>
       </div>
-      <div className="grid gap-3">
-        <Label htmlFor="username">Username</Label>
-        <Input id="username" defaultValue="@shadcn" />
+      <form
+        onSubmit={handleProfileUpdate}
+        className={cn("grid items-start gap-6 bg-accent p-4", className)}
+      >
+        <div className="grid gap-3">
+          <Label htmlFor="username">Full Name</Label>
+          <Input
+            id="username"
+            className="bg-background"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            disabled={isProfilePending}
+          />
+        </div>
+        <div className="flex justify-between">
+          <div className="grid gap-3">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              type="email"
+              className="bg-background"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={isProfilePending}
+            />
+          </div>
+          <Button type="submit" className="self-end" disabled={isProfilePending}>
+            {isProfilePending ? <Loader2 className="animate-spin" /> : "Update"}
+          </Button>
+        </div>
+      </form>
+
+      {/* ── Security ────────────────────────────────────────────────────────── */}
+      <div className="flex gap-2">
+        <User />
+        <h1>Security</h1>
       </div>
-      <Button type="submit">Save changes</Button>
+        <PasswordForm/>
+    </div>
+  );
+}
+
+// ─── PasswordForm ─────────────────────────────────────────────────────────────
+
+function PasswordForm({ className }: React.ComponentProps<"form">) {
+  const [currentPassword, setCurrentPassword] = React.useState("");
+  const [newPassword, setNewPassword] = React.useState("");
+  const [isPasswordPending, startPasswordTransition] = React.useTransition();
+
+  function handlePasswordUpdate(e: React.FormEvent) {
+    e.preventDefault();
+    startPasswordTransition(async () => {
+      const result = await updatePassword(currentPassword, newPassword);
+      if (!result.success) {
+        toast.error(result.error);
+        return;
+      }
+      toast.success("Password updated successfully.");
+      setCurrentPassword("");
+      setNewPassword("");
+    });
+  }
+
+  return (
+    <form
+      onSubmit={handlePasswordUpdate}
+      className={cn("grid items-start gap-6 bg-accent p-4", className)}
+    >
+      <div className="grid gap-3">
+        <Label htmlFor="current_password">Current Password</Label>
+        <Input
+          type="password"
+          id="current_password"
+          className="bg-background"
+          placeholder="*********"
+          value={currentPassword}
+          onChange={(e) => setCurrentPassword(e.target.value)}
+          disabled={isPasswordPending}
+        />
+      </div>
+      <div className="flex justify-between">
+        <div className="grid gap-3">
+          <Label htmlFor="new_password">New Password</Label>
+          <Input
+            type="password"
+            className="bg-background"
+            id="new_password"
+            placeholder="*********"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            disabled={isPasswordPending}
+          />
+        </div>
+        <Button type="submit" className="self-end" disabled={isPasswordPending}>
+          {isPasswordPending ? <Loader2 className="animate-spin" /> : "Update"}
+        </Button>
+      </div>
     </form>
-    </div>
-  )
+  );
 }
 
-function UserProfile() {
+// ─── DeleteAccountButton ──────────────────────────────────────────────────────
 
-    const isMobile = useIsMobile()
-    const {data:session} = useSession()
+function DeleteAccountButton() {
+  const [isDeleting, startDeleteTransition] = React.useTransition();
+
+  function handleDelete() {
+    startDeleteTransition(async () => {
+      const result = await deleteUser();
+      if (!result.success) {
+        toast.error(result.error);
+        return;
+      }
+      toast.success("Account deleted. Signing you out…");
+      await new Promise((r) => setTimeout(r, 1200));
+      await signOut({ callbackUrl: "/" });
+    });
+  }
+
   return (
-    <div>
-      <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Card className="flex flex-row items-center gap-2 w-60 p-4"
-            >
-              <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={session?.user.image || ""} alt={session?.user.name || "User"} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-              </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{session?.user.name}</span>
-                <span className="truncate text-xs">{session?.user.email}</span>
-              </div>
-              <ChevronsUpDown className="ml-auto size-4" />
-            </Card>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-            side={isMobile ? "bottom" : "right"}
-            align="end"
-            sideOffset={4}
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button className="w-auto" variant="destructive" disabled={isDeleting}>
+          {isDeleting ? <Loader2 className="animate-spin" /> : <Trash2 />}
+          Delete User
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Delete your account?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This will permanently delete your account along with{" "}
+            <strong>all projects, tasks, and messages</strong>. This action
+            cannot be undone.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            onClick={handleDelete}
           >
-            <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={session?.user.image || ""} alt={session?.user.name || "User"} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-                </Avatar>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{session?.user.name}</span>
-                  <span className="truncate text-xs">{session?.user.email}</span>
-                </div>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem disabled>
-                <Sparkles />
-                Upgrade to Pro
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem disabled>
-                <CreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Notifications
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/" })}>
-              <LogOut />
-              Log out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-    </div>
-  )
+            Yes, delete my account
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
 }
-

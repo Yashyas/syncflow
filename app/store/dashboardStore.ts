@@ -167,7 +167,7 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
     set({ currentDashboardView: view }),
 
   // 12.Setting drawer toggle
-  isSettingDrawerOpen: true,
+  isSettingDrawerOpen: false,
   toggleSettingDrawer: () =>
     set((state) => ({ isSettingDrawerOpen: !state.isSettingDrawerOpen })),
 
