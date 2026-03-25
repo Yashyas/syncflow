@@ -75,7 +75,7 @@ function TrashCard({ task }: TrashCardProps) {
       <CardFooter className="flex gap-2 justify-end">
         {/* Delete — permanent */}
         <Button
-          variant=""
+          variant="default"
           size="icon"
           className="mr-auto  hover:bg-destructive "
           onClick={handleDelete}
@@ -87,7 +87,7 @@ function TrashCard({ task }: TrashCardProps) {
 
         {/* Restore to pending */}
         <Button
-          variant=""
+          variant="default"
           size="icon"
           className="hover:bg-secondary hover:text-accent-foreground"
           onClick={handleRestore}
@@ -99,7 +99,7 @@ function TrashCard({ task }: TrashCardProps) {
 
         {/* Open chat */}
         <Button
-          variant=""
+          variant="default"
           size="icon"
           className="relative hover:bg-secondary hover:text-accent-foreground"
           onClick={handleChat}
