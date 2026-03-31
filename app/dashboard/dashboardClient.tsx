@@ -113,7 +113,7 @@ export default function DashboardClient() {
             <div className="flex items-center justify-around top-0 sticky h-10 hidden md:flex ">
               <ButtonGroup>
                 <ButtonGroup
-                  className={`${currentDashboardView === CurrentView.CHAT || currentDashboardView === CurrentView.TRASH ? "hidden" : "flex"}`}
+                  className={`${currentDashboardView === CurrentView.CHAT || currentDashboardView === CurrentView.TRASH  || currentDashboardView === CurrentView.IDEAS ? "hidden" : "flex"}`}
                 >
                   <Button onClick={toggleAddTaskDrawer}>
                     <CirclePlus />
@@ -174,7 +174,7 @@ export default function DashboardClient() {
             <div className="flex items-center justify-center top-0 sticky h-10 sm:hidden ">
               <ButtonGroup className="flex max-w-[80vw]">
                 <ButtonGroup
-                  className={`${currentDashboardView === CurrentView.CHAT || currentDashboardView === CurrentView.TRASH ? "hidden" : "flex"}`}
+                  className={`${currentDashboardView === CurrentView.CHAT || currentDashboardView === CurrentView.TRASH || currentDashboardView === CurrentView.IDEAS ? "hidden" : "flex"}`}
                 >
                   <Button onClick={toggleAddTaskDrawer}>
                     <CirclePlus />

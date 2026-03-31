@@ -80,9 +80,10 @@ export default function ClientProjectDisplay() {
     setView(ClientView.CHAT);
   }
 
-  function handleLogout() {
-    clearProject();
+  async function handleLogout() {
+    await clearProject();
     router.push("/client");
+    
   }
 
   if (!project) return null;

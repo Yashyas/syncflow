@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import heroImage from '../public/hero.png'
+import DevDash from '../public/developer-dashboard.png'
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card'
 import { Button } from './ui/button'
 
@@ -8,7 +8,7 @@ export default function Comp() {
     <div className='flex flex-col md:flex-row justify-center items-stretch rounded-xl border-1 '>
       <div className='flex flex-1 justify-center'>
         <Image
-        src={heroImage} 
+        src={DevDash} 
         alt='syncflow hero img'
         priority
         className='md:rounded-l-xl md:rounded-t-none rounded-t-xl object-cover'

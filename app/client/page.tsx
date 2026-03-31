@@ -116,7 +116,7 @@ export default function ClientLoginPage() {
       </div>
       {/* Right Side */}
       <div className="hidden w-3/5 flex-col overflow-y-auto border-r bg-muted/30 p-12 lg:flex xl:p-24">
-  <div className="mx-auto flex max-w-xl flex-col gap-8 pt-8">
+  <div className="mx-auto  flex max-w-xl flex-col gap-8 pt-8">
 
     {/* Hero */}
     <div>
@@ -180,67 +180,12 @@ export default function ClientLoginPage() {
 
       <div className="flex items-start gap-4">
         <div className="rounded-full bg-primary/10 p-3 text-primary shrink-0">
-          <FileText className="h-6 w-6" />
-        </div>
-        <div>
-          <h3 className="text-xl font-semibold">Document & File Access</h3>
-          <p className="mt-2 text-muted-foreground">
-            All deliverables, contracts, design files, and reports are stored in
-            one place. Download them anytime — no hunting through email threads.
-          </p>
-        </div>
-      </div>
-
-      <div className="flex items-start gap-4">
-        <div className="rounded-full bg-primary/10 p-3 text-primary shrink-0">
           <Bell className="h-6 w-6" />
         </div>
         <div>
-          <h3 className="text-xl font-semibold">Instant Notifications</h3>
+          <h3 className="text-xl font-semibold">Recent Activity Tracking</h3>
           <p className="mt-2 text-muted-foreground">
-            Get notified the moment a milestone is hit, a file is uploaded, or
-            the team leaves a comment. You're always the first to know.
-          </p>
-        </div>
-      </div>
-
-      <div className="flex items-start gap-4">
-        <div className="rounded-full bg-primary/10 p-3 text-primary shrink-0">
-          <BarChart2 className="h-6 w-6" />
-        </div>
-        <div>
-          <h3 className="text-xl font-semibold">Finance & Budget Overview</h3>
-          <p className="mt-2 text-muted-foreground">
-            See a clear breakdown of invoices, payments, and outstanding
-            balances in the Finance tab. Full transparency with zero surprises
-            at billing time.
-          </p>
-        </div>
-      </div>
-
-      <div className="flex items-start gap-4">
-        <div className="rounded-full bg-primary/10 p-3 text-primary shrink-0">
-          <CalendarCheck className="h-6 w-6" />
-        </div>
-        <div>
-          <h3 className="text-xl font-semibold">Milestone Timeline</h3>
-          <p className="mt-2 text-muted-foreground">
-            A visual timeline maps out every phase of your project from kickoff
-            to launch. Know exactly what's coming next and when to expect it.
-          </p>
-        </div>
-      </div>
-
-      <div className="flex items-start gap-4">
-        <div className="rounded-full bg-primary/10 p-3 text-primary shrink-0">
-          <Users className="h-6 w-6" />
-        </div>
-        <div>
-          <h3 className="text-xl font-semibold">Meet Your Team</h3>
-          <p className="mt-2 text-muted-foreground">
-            See who's working on your project, their roles, and their
-            availability. No more wondering who to contact — everyone is just a
-            click away.
+            Get notified the moment a milestone is hit. You always have the complete picture of what is going on.
           </p>
         </div>
       </div>
@@ -281,7 +226,7 @@ export default function ClientLoginPage() {
     <div className="grid grid-cols-3 gap-4 text-center">
       <div className="rounded-xl bg-background border p-4">
         <p className="text-2xl font-bold text-foreground">100%</p>
-        <p className="text-xs text-muted-foreground mt-1">Transparent billing</p>
+        <p className="text-xs text-muted-foreground mt-1">Transparent tracking</p>
       </div>
       <div className="rounded-xl bg-background border p-4">
         <p className="text-2xl font-bold text-foreground">24/7</p>
