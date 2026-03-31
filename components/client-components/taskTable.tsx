@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Task } from "@/lib/generated/prisma/client"
+import { Task } from "@prisma/client"
 import { BadgeCheck, Eye, Loader, MessageSquareText, Pickaxe } from "lucide-react"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"

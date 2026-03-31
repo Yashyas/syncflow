@@ -1,7 +1,7 @@
 "use server"
 import { prisma } from "@/lib/prisma";  
 import pusherServer from "@/lib/pusher-server";
-import { Sender } from "@/lib/generated/prisma/client";
+import { Sender } from "@prisma/client";
 
 
 export async function getMessages(taskId: string) {

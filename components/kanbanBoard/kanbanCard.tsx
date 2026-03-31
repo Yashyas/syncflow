@@ -1,4 +1,4 @@
-import { Task } from "@/lib/generated/prisma/client";
+import { Task } from "@prisma/client";
 import {useDraggable} from '@dnd-kit/core'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { MessageSquareText, SquarePen, Trash2 } from "lucide-react";

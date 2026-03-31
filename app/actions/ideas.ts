@@ -1,7 +1,7 @@
 "use server";
 
 import {prisma} from "@/lib/prisma";
-import { IdeaType } from "@/lib/generated/prisma/client";
+import { IdeaType } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 // ── Shared auth helper ──────────────────────────────────────────────────────

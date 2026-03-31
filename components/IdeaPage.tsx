@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Idea } from "@/lib/generated/prisma/client";
+import { Idea } from "@prisma/client";
 import { getIdeas, addTextOrUrlIdea, addImageIdea, deleteIdea } from "@/app/actions/ideas";
 import { useUploadThing } from "@/lib/uploadthing";
 import { toast } from "sonner";

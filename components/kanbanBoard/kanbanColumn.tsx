@@ -1,5 +1,4 @@
-import { Task } from "@/lib/generated/prisma/client"
-import { TaskStatus } from "@/lib/generated/prisma/enums"
+import { Task ,TaskStatus } from "@prisma/client"
 import { useDroppable } from "@dnd-kit/core"
 import { Separator } from "../ui/separator"
 import { ScrollArea } from "../ui/scroll-area"

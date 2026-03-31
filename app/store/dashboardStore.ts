@@ -1,4 +1,4 @@
-import { Message, Project, Task} from "@/lib/generated/prisma/client";
+import { Message, Project, Task} from "@prisma/client";
 import { create } from "zustand/react";
 
 export enum CurrentView {

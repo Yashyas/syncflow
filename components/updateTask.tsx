@@ -19,7 +19,7 @@ import { toast } from "sonner";
 import React, { useState } from "react";
 import { useDashboardStore } from "@/app/store/dashboardStore";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
-import { Task } from "@/lib/generated/prisma/client";
+import { Task } from "@prisma/client";
 import { Textarea } from "./ui/textarea";
 import { title } from "process";
 

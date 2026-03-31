@@ -1,4 +1,4 @@
-import { Message, Task } from "@/lib/generated/prisma/client";
+import { Message, Task } from "@prisma/client";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 

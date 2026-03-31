@@ -1,7 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
-import { Task } from "@/lib/generated/prisma/client";
+import { Task } from "@prisma/client";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { MessageSquareText, RotateCcw, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";

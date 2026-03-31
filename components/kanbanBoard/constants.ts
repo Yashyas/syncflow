@@ -1,4 +1,4 @@
-import { TaskStatus } from "@/lib/generated/prisma/enums";
+import { TaskStatus } from "@prisma/client";
 
 export const COLUMNS: {id: TaskStatus;label:string}[] =[
     {id: 'pending', label:'Pending'},
